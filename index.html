@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ready Together · Rainbow Leads (prototype)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Baloo+2:wght@500;700;800&family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1D2B3A; --muted:#5B6B7C; --paper:#F5F8FB; --card:#FFFFFF; --line:#DCE4EC;
+  --sage:#2E6E70; --sage-soft:#E3F0EF; --sky:#DCEBFA;
+  --red:#E5484D; --yellow:#F2B33D; --green:#35A05A; --blue:#3E7BE0; --pink:#E06AA8;
+  --alert:#B42318; --alert-soft:#FDECEA;
+  --monitor:#0E1E22; --trace:#5BE38A;
+  --display:"Baloo 2","Vazirmatn",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Vazirmatn",system-ui,-apple-system,"Segoe UI",sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ink:#E8EEF4; --muted:#A3B1BF; --paper:#121A22; --card:#1A2530; --line:#2C3A47;
+    --sage:#6FC0BC; --sage-soft:#1E3534; --sky:#1C2E42; --alert:#FF8A80; --alert-soft:#3A1D1C;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E8EEF4; --muted:#A3B1BF; --paper:#121A22; --card:#1A2530; --line:#2C3A47;
+  --sage:#6FC0BC; --sage-soft:#1E3534; --sky:#1C2E42; --alert:#FF8A80; --alert-soft:#3A1D1C;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+[dir="rtl"] body{font-family:"Vazirmatn",var(--body)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:8px}
+img,svg{max-width:100%}
+
+.app{max-width:440px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--paper)}
+@media (min-width:520px){
+  body{padding:24px 0}
+  .app{min-height:820px;border:1px solid var(--line);border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(29,43,58,.12)}
+}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 18px 10px;background:var(--card);border-bottom:1px solid var(--line)}
+.brand{font-family:var(--display);font-weight:800;font-size:20px;line-height:1.1}
+.brand small{display:block;font-family:var(--body);font-weight:400;font-size:12px;color:var(--muted)}
+.lang{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 12px;font-size:14px}
+.proto{background:#FFF4D6;color:#6B4E00;font-size:12.5px;padding:6px 18px;text-align:center}
+:root[data-theme="dark"] .proto{background:#3A3216;color:#F2D58A}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .proto{background:#3A3216;color:#F2D58A}}
+
+main{flex:1;padding:18px 18px 100px;overflow-y:auto}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0 0 8px}
+h1{font-size:28px;font-weight:800}
+h2{font-size:21px;font-weight:700}
+h3{font-size:17px;font-weight:700}
+p{margin:0 0 12px}
+.muted{color:var(--muted)}
+.block{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:14px;padding:12px 16px;font-weight:700;background:var(--sage);color:#fff}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+
+/* home */
+.hello{margin:6px 0 18px}
+.surgery{display:flex;justify-content:space-between;align-items:center;background:var(--sage);color:#fff;border-radius:20px;padding:16px 18px;margin-bottom:18px}
+.surgery b{font-family:var(--display);font-size:20px;display:block}
+.count{font-family:var(--display);font-weight:800;font-size:40px;line-height:1;text-align:center}
+.count small{display:block;font-size:12px;font-family:var(--body);font-weight:400}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.role{border:2px solid var(--line);background:var(--card);border-radius:20px;padding:16px 12px;text-align:start}
+.role .em{font-size:30px;display:block;margin-bottom:6px}
+.role b{font-family:var(--display);font-size:18px;display:block}
+.role span{font-size:14px;color:var(--muted)}
+.role.kid{border-color:transparent;background:
+  linear-gradient(var(--card),var(--card)) padding-box,
+  linear-gradient(120deg,var(--red),var(--yellow),var(--green),var(--blue)) border-box;border:2px solid transparent}
+
+/* timeline */
+.steps{list-style:none;margin:0;padding:0;position:relative}
+.steps li{position:relative;padding:0 0 16px 28px}
+[dir="rtl"] .steps li{padding:0 28px 16px 0}
+.steps li::before{content:"";position:absolute;inset-inline-start:7px;top:8px;bottom:-4px;width:2px;background:var(--line)}
+.steps li:last-child::before{display:none}
+.steps li::after{content:"";position:absolute;inset-inline-start:2px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--sage)}
+.steps time{font-weight:700;color:var(--sage);display:block;font-size:14px}
+.planner{display:flex;align-items:center;gap:10px;margin:8px 0 14px}
+.planner input{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--paper);font-size:18px}
+.fast{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fast div{background:var(--sage-soft);border-radius:14px;padding:12px}
+.fast b{font-family:var(--display);font-size:24px;display:block}
+.note{font-size:13.5px;color:var(--muted);margin-top:10px}
+
+/* kid */
+.ages{display:flex;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px;margin-bottom:14px}
+.ages button{flex:1;border:none;background:transparent;border-radius:999px;padding:8px 4px;font-size:14px}
+.ages button[aria-pressed="true"]{background:var(--ink);color:var(--paper);font-weight:700}
+.stage{display:grid;grid-template-columns:1fr;gap:12px}
+.monitor{background:var(--monitor);border-radius:18px;padding:12px 14px;color:#cfe;position:relative}
+.monitor canvas{width:100%;height:110px;display:block}
+.mon-top{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:#9fb}
+.hr{font-family:var(--display);font-weight:800;font-size:34px;color:var(--trace);line-height:1}
+.body-wrap{display:flex;gap:12px;align-items:center}
+.body-wrap svg{width:150px;flex:none}
+.stickers{display:flex;flex-direction:column;gap:8px;flex:1}
+.sticker{display:flex;align-items:center;gap:10px;border:2px solid var(--line);background:var(--card);border-radius:14px;padding:10px 12px;font-weight:700;text-align:start}
+.sticker i{width:22px;height:22px;border-radius:50%;flex:none;border:3px solid rgba(0,0,0,.15)}
+.sticker[aria-pressed="true"]{opacity:.55}
+.done{background:var(--sage-soft);border-radius:14px;padding:12px;font-weight:700}
+.tabs-kid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}
+.tabs-kid button{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:8px 2px;font-size:12.5px;line-height:1.2}
+.tabs-kid button .em{font-size:22px;display:block}
+.tabs-kid button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);font-weight:700}
+.bflies{display:flex;gap:10px;margin:10px 0}
+.bflies button{width:52px;height:52px;border-radius:14px;border:2px solid var(--line);background:var(--card)}
+.bflies button[aria-pressed="true"]{border-color:var(--ink)}
+.little p{font-size:19px}
+.balloon-wrap{display:grid;place-items:center;height:180px}
+.balloon{width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff8,transparent 40%),var(--blue);transition:transform 4s ease-in-out}
+.balloon.in{transform:scale(1.8)}
+.breath-label{font-family:var(--display);font-size:22px;text-align:center;min-height:32px}
+
+/* after */
+.faces{display:flex;justify-content:space-between;gap:4px;margin:8px 0 12px}
+.faces button{flex:1;border:2px solid var(--line);background:var(--card);border-radius:12px;padding:6px 0;font-size:22px}
+.faces button[aria-pressed="true"]{border-color:var(--sage);background:var(--sage-soft)}
+.toggle-row{display:flex;gap:8px;margin:6px 0 12px}
+.toggle-row button{flex:1;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px}
+.toggle-row button[aria-pressed="true"]{background:var(--sage);color:#fff;border-color:var(--sage)}
+.alert{background:var(--alert-soft);border:2px solid var(--alert);border-radius:18px;padding:16px;margin-bottom:14px}
+.alert h3{color:var(--alert)}
+.alert ul{margin:6px 0 12px;padding-inline-start:20px}
+.food{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.food div{border-radius:14px;padding:12px;font-size:14.5px}
+.food .yes{background:var(--sage-soft)}
+.food .no{background:var(--alert-soft)}
+.log{list-style:none;padding:0;margin:8px 0 0;font-size:14.5px}
+.log li{border-top:1px solid var(--line);padding:8px 0}
+
+/* ask */
+.chat{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.msg{max-width:88%;padding:10px 14px;border-radius:16px;font-size:15px}
+.msg.me{align-self:flex-end;background:var(--ink);color:var(--paper)}
+.msg.bot{align-self:flex-start;background:var(--card);border:1px solid var(--line)}
+.msg.bot .src{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+.msg.urgent{background:var(--alert-soft);border:2px solid var(--alert)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chips button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 12px;font-size:14px;text-align:start}
+.ask-row{display:flex;gap:8px}
+.ask-row input{flex:1;border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--card)}
+
+/* nav */
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;background:var(--card);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+@media (min-width:520px){nav{position:sticky;transform:none;left:auto;bottom:0}}
+nav[hidden]{display:none}
+nav button{border:none;background:transparent;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;font-size:11.5px;color:var(--muted);border-radius:12px}
+nav button .em{font-size:20px}
+nav button[aria-current="page"]{color:var(--ink);font-weight:700;background:var(--sky)}
+
+/* setup */
+.stepper{display:flex;gap:6px;margin:4px 0 16px}
+.stepper span{flex:1;height:6px;border-radius:6px;background:var(--line)}
+.stepper span.on{background:var(--sage)}
+.pick{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.opt{display:flex;flex-direction:column;align-items:flex-start;text-align:start;border:2px solid var(--line);background:var(--card);border-radius:16px;padding:14px}
+.opt b{font-family:var(--display);font-size:18px}
+.opt span{font-size:14px;color:var(--muted)}
+.opt[aria-pressed="true"]{border-color:var(--sage);background:var(--sage-soft)}
+.opt[disabled]{opacity:.5;cursor:default}
+.team{display:grid;grid-template-columns:1fr;gap:10px}
+.doc{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.doc .av{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:24px;background:var(--sky);flex:none}
+.doc b{font-family:var(--display);font-size:17px;display:block}
+.doc small{color:var(--muted);display:block;margin-bottom:4px}
+.instr{border-inline-start:5px solid var(--yellow);background:#FFF8E6;border-radius:12px;padding:12px 14px;margin:0 0 14px;color:#4A3A00}
+:root[data-theme="dark"] .instr{background:#33290F;color:#F2E2B0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .instr{background:#33290F;color:#F2E2B0}}
+.instr b{display:block}
+.linkbtn{border:none;background:none;color:var(--sage);text-decoration:underline;padding:0;font-size:14px}
+@media (prefers-reduced-motion:reduce){.balloon{transition:none}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="top">
+    <div class="brand" id="brand"></div>
+    <button class="lang" id="langBtn" type="button"></button>
+  </header>
+  <div class="proto" id="proto"></div>
+  <main id="main" tabindex="-1"></main>
+  <nav id="nav" aria-label="Main"></nav>
+</div>
+
+<script>
+const S = {
+en:{
+  brand:"Ready Together", brandSub:"with Rainbow Leads for kids", lang:"فارسی",
+  proto:"Prototype for demonstration only. Not for clinical use. Example content.",
+  nav:{home:"Home",prep:"Get ready",kid:"Rainbow Leads",after:"After surgery",ask:"Ask"},
+  hello:"Hi Sara's family", helloSub:"Here's everything for Sara's surgery, in one place.",
+  surgery:"Tonsillectomy", centre:"Example Children's Day Surgery Centre", days:"days to go",
+  rolesTitle:"Who's using the app right now?",
+  parent:"I'm a parent", parentSub:"Plan the day, fasting, questions",
+  kid:"I'm a kid", kidSub:"Meet the operating room",
+  prepTitle:"The day of surgery", prepSub:"What happens, step by step.",
+  steps:[["7:00–7:30","Arrive and register","Bring the child's ID and any medicines."],["About 8:30","Nurse and doctor visit","Your child changes into hospital clothes."],["About 8:45","Goodbye at the operating room door","One parent can come back in recovery when the child is settled."],["About 45 min after","Recovery room","Then a few hours on the ward before going home."]],
+  fastTitle:"Fasting planner", fastSub:"Enter the surgery start time your centre gave you.",
+  surgTime:"Surgery time", solids:"Last food or milk", fluids:"Last clear drink",
+  fastNote:"Example based on international paediatric guidance (food 6 h, clear fluids 1 h before). Your centre may give different times. Always follow your care team.",
+  talkTitle:"How to talk to your child", talk:[
+    "Explain why: \"This will help you breathe and sleep better at night.\"",
+    "Make time concrete: \"We'll be apart for about as long as one of your cartoons.\"",
+    "Tell them who will look after them, and that you'll be there when they wake up.",
+    "Your calm helps them most. Children notice when parents are worried."],
+  kidTitle:"Meet the operating room", kidSub:"Tap through and see what happens before you go to sleep.",
+  ages:["3–5","6–9","10–15"],
+  ktabs:{leads:"Stickers",mon:"Monitor",bfly:"Butterfly",mask:"Pilot mask"},
+  leadsIntro:{0:"Let's stick the colourful stickers on your friend!",1:"These stickers help the monitor see your heart. Put them on!",2:"These are ECG electrodes. They pick up the tiny electrical signal of your heartbeat."},
+  stick:"Stick", red:"Red", yellow:"Yellow", green:"Green",
+  leadsDone:{0:"You found the heartbeat! Bump, bump!",1:"Great job! The line on the screen is your heart saying hello.",2:"Each beat makes a spike. The number is your heart rate per minute."},
+  monText:{0:"This is like a TV that shows your heart going bump, bump.",1:"It's like a video game screen. It shows your heartbeat and how much air is in your body.",2:"The monitor shows heart rate, the ECG trace, and oxygen saturation from a sensor on your finger."},
+  bflyText:{0:"This is a little butterfly. It gives you medicine through a tiny soft straw. Pick a colour!",1:"It looks like a needle, but only a soft plastic straw stays in. Pick your colour and take two big breaths.",2:"It's an IV cannula. The needle comes out and a soft plastic tube stays in, so medicine can go straight into your vein."},
+  pick:"Pick a colour",
+  maskText:{0:"Pilots wear a mask like this! Blow up the balloon with big breaths.",1:"Like a helicopter pilot's mask. Breathe slowly, close your eyes, and think of something nice.",2:"The mask gives oxygen and the sleep medicine as a gas. Slow, deep breaths help it work smoothly."},
+  breathe:"Breathe with the balloon", start:"Start", in:"Breathe in…", out:"…and out",
+  afterTitle:"After surgery at home", checkTitle:"Daily check-in", checkSub:"Day 1 after surgery",
+  pain:"How much does it hurt?", drink:"Is your child drinking?", sleep:"Did your child sleep well?",
+  yes:"Yes", some:"A little", no:"No", save:"Save today's check-in",
+  logged:"In the full version, check-ins can be shared with your care team.",
+  logTitle:"Your check-ins",
+  alertTitle:"Get help now if you see", alerts:["Bright red blood from the mouth or nose","Vomiting blood","Not drinking for many hours","High fever"],
+  alertBtn:"Call the centre or go to emergency",
+  foodTitle:"Food and drink", foodYes:"Usually fine (if your surgeon agrees): water, cool soft foods like yogurt or ice cream, soft pasta, soup that isn't hot.",
+  foodNo:"Usually avoid: acidic juices like orange juice, crunchy or spicy food, very hot drinks.",
+  foodNote:"Example guidance. Always follow your surgeon's instructions.",
+  askTitle:"Ask a question", askSub:"Answers come only from your care team's approved instructions.",
+  chips:["When must my child stop eating?","When can my child eat after surgery?","Is some pain normal?","What if I see blood?"],
+  placeholder:"Type a question", send:"Send",
+  answers:{
+    fast:"Food and milk: until 6 hours before surgery. Clear drinks like water: until 1 hour before, unless your centre says otherwise. The fasting planner on 'Get ready' works out the times for you.",
+    eat:"Your child can usually start with water and cool soft foods once fully awake and not feeling sick. Avoid acidic juices like orange juice.",
+    pain:"Some throat pain is expected and can last about a week or more. Give pain medicine exactly as your surgeon prescribed. Cool drinks can help.",
+    unknown:"I can only answer from your care team's instructions. For this question, please contact the centre."},
+  src:"Source: example centre instructions, approved by the surgical team",
+  urgent:"This could be a warning sign. Don't wait: call the centre or go to the nearest emergency department now."
+},
+fa:{
+  brand:"آماده با هم", brandSub:"همراه با «لیدهای رنگین‌کمانی» برای بچه‌ها", lang:"English",
+  proto:"نمونه اولیه، فقط برای نمایش. برای استفاده بالینی نیست. محتوا نمونه است.",
+  nav:{home:"خانه",prep:"آمادگی",kid:"لیدهای رنگی",after:"بعد از عمل",ask:"بپرس"},
+  hello:"سلام خانواده سارا", helloSub:"همه چیز درباره عمل سارا، یک‌جا.",
+  surgery:"جراحی لوزه", centre:"مرکز جراحی سرپایی کودکان (نمونه)", days:"روز مانده",
+  rolesTitle:"الان چه کسی از اپ استفاده می‌کند؟",
+  parent:"من والد هستم", parentSub:"برنامه روز عمل، ناشتایی، پرسش‌ها",
+  kid:"من بچه هستم", kidSub:"آشنایی با اتاق عمل",
+  prepTitle:"روز عمل", prepSub:"چه اتفاقی می‌افتد، مرحله‌به‌مرحله.",
+  steps:[["۷ تا ۷:۳۰","رسیدن و پذیرش","مدارک کودک و داروهایش را همراه بیاورید."],["حدود ۸:۳۰","ویزیت پرستار و پزشک","کودک لباس بیمارستان می‌پوشد."],["حدود ۸:۴۵","خداحافظی دم در اتاق عمل","وقتی کودک آرام‌تر شد، یکی از والدین می‌تواند به ریکاوری بیاید."],["حدود ۴۵ دقیقه بعد","ریکاوری","سپس چند ساعت در بخش و بعد ترخیص."]],
+  fastTitle:"برنامه‌ریز ناشتایی", fastSub:"ساعت شروع عمل را که مرکز گفته وارد کنید.",
+  surgTime:"ساعت عمل", solids:"آخرین غذا یا شیر", fluids:"آخرین نوشیدنی شفاف",
+  fastNote:"نمونه بر اساس راهنمای بین‌المللی کودکان (غذا ۶ ساعت، مایعات شفاف ۱ ساعت قبل). ممکن است مرکز شما زمان دیگری بگوید. همیشه از دستور تیم درمان پیروی کنید.",
+  talkTitle:"چطور با کودکتان صحبت کنید", talk:[
+    "دلیلش را بگویید: «این کار کمک می‌کند شب‌ها راحت‌تر نفس بکشی و بخوابی.»",
+    "زمان را ملموس کنید: «به اندازه یکی از کارتون‌هایت از هم جداییم.»",
+    "بگویید چه کسی از او مراقبت می‌کند و وقتی بیدار شد شما کنارش هستید.",
+    "آرامش شما بیشترین کمک است. بچه‌ها نگرانی والدین را حس می‌کنند."],
+  kidTitle:"آشنایی با اتاق عمل", kidSub:"ببین قبل از خواب چه اتفاقی می‌افتد.",
+  ages:["۳ تا ۵","۶ تا ۹","۱۰ تا ۱۵"],
+  ktabs:{leads:"برچسب‌ها",mon:"مانیتور",bfly:"پروانه",mask:"ماسک خلبان"},
+  leadsIntro:{0:"بیا برچسب‌های رنگی را روی دوستمان بچسبانیم!",1:"این برچسب‌ها کمک می‌کنند مانیتور قلبت را ببیند. بچسبانشان!",2:"این‌ها الکترودهای نوار قلب‌اند و سیگنال الکتریکی کوچک ضربان قلبت را می‌گیرند."},
+  stick:"بچسبان", red:"قرمز", yellow:"زرد", green:"سبز",
+  leadsDone:{0:"صدای قلب را پیدا کردی! تاپ، تاپ!",1:"آفرین! این خط روی صفحه، قلبت است که سلام می‌کند.",2:"هر ضربان یک قله می‌سازد. این عدد، ضربان قلب در دقیقه است."},
+  monText:{0:"این مثل تلویزیونی است که تاپ‌تاپ قلبت را نشان می‌دهد.",1:"مثل صفحه بازی کامپیوتری است؛ ضربان قلبت و مقدار هوای بدنت را نشان می‌دهد.",2:"مانیتور ضربان قلب، نوار قلب و اکسیژن خون را از حسگر روی انگشتت نشان می‌دهد."},
+  bflyText:{0:"این یک پروانه کوچولوست که با یک نی نرم به تو دارو می‌دهد. رنگش را انتخاب کن!",1:"شبیه سوزن است، اما فقط یک نی پلاستیکی نرم می‌ماند. رنگت را انتخاب کن و دو نفس عمیق بکش.",2:"این آنژیوکت است. سوزن بیرون می‌آید و یک لوله نرم پلاستیکی می‌ماند تا دارو مستقیم وارد رگ شود."},
+  pick:"یک رنگ انتخاب کن",
+  maskText:{0:"خلبان‌ها هم چنین ماسکی دارند! با نفس‌های بزرگ بادکنک را باد کن.",1:"مثل ماسک خلبان هلیکوپتر. آرام نفس بکش، چشم‌هایت را ببند و به چیزهای خوب فکر کن.",2:"ماسک، اکسیژن و داروی خواب را به‌صورت گاز می‌دهد. نفس‌های آرام و عمیق کمک می‌کند بهتر اثر کند."},
+  breathe:"با بادکنک نفس بکش", start:"شروع", in:"نفس بکش…", out:"…و بیرون بده",
+  afterTitle:"بعد از عمل، در خانه", checkTitle:"ثبت روزانه", checkSub:"روز اول بعد از عمل",
+  pain:"چقدر درد دارد؟", drink:"کودک مایعات می‌نوشد؟", sleep:"خوب خوابید؟",
+  yes:"بله", some:"کمی", no:"نه", save:"ثبت امروز",
+  logged:"در نسخه کامل، این ثبت‌ها می‌تواند با تیم درمان به اشتراک گذاشته شود.",
+  logTitle:"ثبت‌های شما",
+  alertTitle:"اگر این‌ها را دیدید، فوراً کمک بگیرید", alerts:["خون قرمز روشن از دهان یا بینی","استفراغ خونی","چند ساعت هیچ نوشیدنی نخوردن","تب بالا"],
+  alertBtn:"با مرکز تماس بگیرید یا به اورژانس بروید",
+  foodTitle:"خوردن و نوشیدن", foodYes:"معمولاً مناسب (با تأیید جراح): آب، خوراکی‌های نرم و خنک مثل ماست یا بستنی، ماکارونی نرم، سوپ نه‌چندان داغ.",
+  foodNo:"معمولاً پرهیز شود: آب‌میوه‌های اسیدی مثل آب پرتقال، غذاهای ترد یا تند، نوشیدنی خیلی داغ.",
+  foodNote:"راهنمای نمونه. همیشه از دستور جراح پیروی کنید.",
+  askTitle:"سؤال بپرسید", askSub:"پاسخ‌ها فقط از دستورالعمل‌های تأییدشده تیم درمان می‌آیند.",
+  chips:["کودکم از کی نباید غذا بخورد؟","بعد از عمل کی می‌تواند غذا بخورد؟","کمی درد طبیعی است؟","اگر خون دیدم چه کنم؟"],
+  placeholder:"سؤالتان را بنویسید", send:"ارسال",
+  answers:{
+    fast:"غذا و شیر: تا ۶ ساعت قبل از عمل. نوشیدنی‌های شفاف مثل آب: تا ۱ ساعت قبل، مگر اینکه مرکز چیز دیگری بگوید. برنامه‌ریز ناشتایی در بخش «آمادگی» زمان‌ها را برایتان حساب می‌کند.",
+    eat:"معمولاً وقتی کودک کاملاً بیدار است و حالت تهوع ندارد، می‌تواند با آب و خوراکی‌های نرم و خنک شروع کند. از آب‌میوه‌های اسیدی مثل آب پرتقال پرهیز کنید.",
+    pain:"کمی درد گلو طبیعی است و ممکن است حدود یک هفته یا بیشتر طول بکشد. داروی مسکن را دقیقاً طبق دستور جراح بدهید. نوشیدنی خنک کمک می‌کند.",
+    unknown:"من فقط از روی دستورالعمل‌های تیم درمان پاسخ می‌دهم. برای این سؤال، لطفاً با مرکز تماس بگیرید."},
+  src:"منبع: دستورالعمل نمونه مرکز، تأییدشده توسط تیم جراحی",
+  urgent:"این می‌تواند علامت هشدار باشد. منتظر نمانید: همین حالا با مرکز تماس بگیرید یا به نزدیک‌ترین اورژانس بروید."
+}};
+
+const CENTRES=[
+ {id:"a",name:{en:"Nikan Sub-Specialized Medical Center",fa:"مرکز فوق‌تخصصی نیکان"},city:{en:"Tehran · day surgery",fa:"تهران · جراحی سرپایی"},solids:8,fluids:8,arrive:"07:00",recovery:true,
+  surgeons:[{id:"s1",g:"f",spec:"ent",name:{en:"Dr. Leila Ahmadi",fa:"دکتر لیلا احمدی"},first:{en:"Dr. Leila",fa:"دکتر لیلا"},note:{en:"Call the office if your child has a cold, cough or fever in the week before surgery. The operation may need to be moved.",fa:"اگر کودک در هفته قبل از عمل سرماخوردگی، سرفه یا تب داشت، با مطب تماس بگیرید. ممکن است زمان عمل تغییر کند."}},
+            {id:"s2",g:"m",spec:"ent",name:{en:"Dr. Reza Karimi",fa:"دکتر رضا کریمی"},first:{en:"Dr. Reza",fa:"دکتر رضا"},note:{en:"Please bring any previous sleep or hearing test results on the day of surgery.",fa:"لطفاً نتایج آزمایش‌های قبلی خواب یا شنوایی را روز عمل همراه بیاورید."}},
+            {id:"s4",g:"m",spec:"uro",name:{en:"Dr. Hamed Nouri",fa:"دکتر حامد نوری"},first:{en:"Dr. Hamed",fa:"دکتر حامد"},note:{en:"Bathe your child the evening before surgery and bring a spare pair of loose trousers.",fa:"عصر روز قبل از عمل کودک را حمام کنید و یک شلوار گشاد اضافه همراه بیاورید."}}],
+  anes:{g:"f",name:{en:"Dr. Mina Moradi",fa:"دکتر مینا مرادی"},first:{en:"Dr. Mina",fa:"دکتر مینا"}}},
+ {id:"b",name:{en:"Example University Children's Hospital",fa:"بیمارستان آموزشی کودکان (نمونه)"},city:{en:"Teaching hospital",fa:"بیمارستان آموزشی"},solids:6,fluids:1,arrive:"06:30",recovery:false,
+  surgeons:[{id:"s3",g:"m",spec:"ent",name:{en:"Dr. Omid Rahimi",fa:"دکتر امید رحیمی"},first:{en:"Dr. Omid",fa:"دکتر امید"},note:{en:"Stop any herbal remedies one week before surgery and tell us about all medicines your child takes.",fa:"از یک هفته قبل از عمل، داروهای گیاهی را قطع کنید و همه داروهایی را که کودک مصرف می‌کند به ما بگویید."}},
+            {id:"s5",g:"f",spec:"uro",name:{en:"Dr. Sima Rostami",fa:"دکتر سیما رستمی"},first:{en:"Dr. Sima",fa:"دکتر سیما"},note:{en:"Bathe your child the evening before surgery and bring a spare pair of loose trousers.",fa:"عصر روز قبل از عمل کودک را حمام کنید و یک شلوار گشاد اضافه همراه بیاورید."}}],
+  anes:{g:"f",name:{en:"Dr. Neda Jafari",fa:"دکتر ندا جعفری"},first:{en:"Dr. Neda",fa:"دکتر ندا"}}}
+];
+const G={"24":{en:"yellow",fa:"زرد",c:"var(--yellow)"},"22":{en:"blue",fa:"آبی",c:"var(--blue)"},"20":{en:"pink",fa:"صورتی",c:"var(--pink)"}};
+const BANDS=[{a:1,w:[5,10],g:["24","22"]},{a:3,w:[10,20],g:["24","22"]},{a:8,w:[15,25],g:["24","22"]},{a:13,w:[20,50],g:["22"]},{a:99,w:[40,70],g:["22","20"]}];
+function hrRange(){ const a=st.child.age; return a<3?[98,140]:a<6?[80,120]:a<12?[75,118]:[60,100]; }
+function hrNow(){ const [l,h]=hrRange(); return Math.round((l+h)/2); }
+function gauges(){ const {age,weight}=st.child; let i=BANDS.findIndex(b=>age<b.a); if(i<0)i=4;
+  if(weight>BANDS[i].w[1]&&i<4)i++; else if(weight<BANDS[i].w[0]&&i>0)i--; return BANDS[i].g; }
+const X={
+ en:{setupTitle:"Set up your child's surgery",s1:"Choose your hospital or centre",s1sub:"Each centre adds its own protocols and instructions.",more:"More centres coming soon",
+  s2:"Choose your child's surgeon",s2sub:"Special instructions from your surgeon will be shown and repeated where they matter.",
+  s3:"Your care team",s3sub:"The anesthesiologist is assigned by the centre for the day of surgery.",
+  next:"Next",back:"Back",startApp:"Start",change:"Change centre or doctor",
+  surgeonRole:"Surgeon · Ear, nose and throat (ENT)",anesRole:"Anesthesiologist on the day of surgery",
+  surgeonDo:"Performs the operation and decides when your child is ready to go home.",
+  anesDo:"Responsible for your child's anesthesia, monitoring and pain control during and after surgery. Before the operation, tell them about allergies, recent illness and any previous reactions to anesthesia.",
+  instrFrom:"Instruction from",protocol:"Your centre's protocol",protoFast:(a,b)=>`Food and milk until ${a} h before, clear drinks until ${b} h before.`,
+  recYes:"One parent may join the child in recovery once they are settled.",recNo:"Parents meet the child on the ward after recovery.",
+  teamTab:"My doctors",
+  childTitle:"About your child",childSub:"Used to tailor the information and the child's section.",cname:"Child's first name",cage:"Age (years)",cweight:"Weight (kg)",need:"Please enter an age between 1 and 17 and a weight.",
+  hello:n=>`Hi ${n}'s family`,
+  bfly:[n=>`This is a little butterfly! It gives you medicine through a tiny soft straw. Yours will probably be`,n=>`It looks like a needle, but only a soft plastic straw stays in. ${n}'s butterfly will probably be`,n=>`It's an IV cannula. The needle comes out and a soft tube stays in your vein. Yours will probably be`],
+  or:"or",
+  gNote:(n,a,w,g)=>`For parents: based on ${n}'s age (${a}) and weight (${w} kg), children usually receive a ${g} cannula (CHOP vascular access guideline). The nurse or anesthesiologist chooses the final size.`,
+  kidTeam:[(s,a,p,q,w)=>`This is ${s}. ${p} ${w} while you're asleep! And this is ${a}, the sleep doctor. ${q} gives you a cozy sleep and stays with you the whole time.`,
+           (s,a,p,q,w)=>`${s} is your surgeon. ${p} ${w}. ${a} is the doctor who helps you sleep and watches the monitor the whole time.`,
+           (s,a,p,q,w)=>`${s}, your surgeon, ${w}. ${a}, your anesthesiologist, gives the anesthetic, keeps you safely asleep and watches your heart and breathing until you wake up.`],
+  welcomeT:"Getting ready for surgery, together",welcomeS:"For children and their families: what to expect, how to prepare, and how to recover at home.",
+  phone:"Mobile number (optional)",phoneNote:"In the full version, your centre could send reminders, such as when to stop eating. Nothing is saved in this prototype.",go:"Get started",
+  s4:"Choose the operation",s4sub:"Only operations your surgeon performs are shown. More will be added over time.",soon:"coming soon",uroRole:"Surgeon · Paediatric urology",exit:"Exit to the welcome screen",
+  helloSub:n=>`Here's everything for ${n}'s surgery, in one place.`,
+  playT:"Play together",playS:"For little ones: sit together and tap the pictures",toRoles:"Back to choose who's using the app",
+  tip:"Sit with your child, tap the pictures together and read the short lines aloud.",read:"🔊 Read aloud",
+  hrLbl:"Normal awake range for this age",hr1:h=>`Your heart beats about ${h} times every minute!`,hr2:(l,h)=>`At rest, a normal heart rate for your age is about ${l}–${h} beats per minute. It can be a little faster when you feel nervous, and that is okay.`,
+  fingerOn:"Put the finger light on",fingerOff:"Take the finger light off",
+  finger:["This little red light gives your finger a gentle hug. It doesn't hurt!","The finger light checks how much oxygen (the air you breathe) is in your blood. The wavy line moves with every heartbeat.","A pulse oximeter shines red light through your finger to measure oxygen saturation (SpO₂). The wave is your pulse; 95–100% is normal."]},
+ fa:{setupTitle:"اطلاعات عمل کودکتان را تنظیم کنید",s1:"بیمارستان یا مرکز درمانی را انتخاب کنید",s1sub:"هر مرکز پروتکل‌ها و دستورالعمل‌های خودش را اضافه می‌کند.",more:"مراکز بیشتر به‌زودی",
+  s2:"جراح کودکتان را انتخاب کنید",s2sub:"دستورهای ویژه جراح نمایش داده می‌شود و هر جا لازم باشد دوباره تأکید می‌شود.",
+  s3:"تیم درمان شما",s3sub:"متخصص بیهوشی روز عمل توسط مرکز تعیین می‌شود.",
+  next:"بعدی",back:"قبلی",startApp:"شروع",change:"تغییر مرکز یا پزشک",
+  surgeonRole:"جراح · گوش، حلق و بینی",anesRole:"متخصص بیهوشی روز عمل",
+  surgeonDo:"عمل را انجام می‌دهد و تصمیم می‌گیرد کودک چه زمانی آماده ترخیص است.",
+  anesDo:"مسئول بیهوشی، مانیتورینگ و کنترل درد کودک در حین و بعد از عمل است. پیش از عمل، درباره حساسیت‌ها، بیماری اخیر و هر واکنش قبلی به بیهوشی به ایشان بگویید.",
+  instrFrom:"دستور ویژه",protocol:"پروتکل مرکز شما",protoFast:(a,b)=>`غذا و شیر تا ${a} ساعت قبل، نوشیدنی‌های شفاف تا ${b} ساعت قبل.`,
+  recYes:"وقتی کودک آرام‌تر شد، یکی از والدین می‌تواند به ریکاوری بیاید.",recNo:"والدین کودک را بعد از ریکاوری در بخش می‌بینند.",
+  teamTab:"دکترهای من",
+  childTitle:"درباره کودکتان",childSub:"برای تنظیم اطلاعات و بخش کودک استفاده می‌شود.",cname:"نام کوچک کودک",cage:"سن (سال)",cweight:"وزن (کیلوگرم)",need:"لطفاً سنی بین ۱ تا ۱۷ و وزن را وارد کنید.",
+  hello:n=>`سلام خانواده ${n}`,
+  bfly:[n=>`این یک پروانه کوچولوست! با یک نی نرم به تو دارو می‌دهد. پروانه تو احتمالاً این رنگ است:`,n=>`شبیه سوزن است، اما فقط یک نی پلاستیکی نرم می‌ماند. پروانه ${n} احتمالاً این رنگ است:`,n=>`این آنژیوکت است. سوزن بیرون می‌آید و یک لوله نرم در رگ می‌ماند. مال تو احتمالاً این رنگ است:`],
+  or:"یا",
+  gNote:(n,a,w,g)=>`برای والدین: بر اساس سن (${a}) و وزن (${w} کیلوگرم) ${n}، معمولاً از آنژیوکت ${g} استفاده می‌شود (راهنمای دسترسی عروقی CHOP). اندازه نهایی را پرستار یا متخصص بیهوشی انتخاب می‌کند.`,
+  kidTeam:[(s,a,p,q,w)=>`این ${s} است. وقتی خوابی، ${w}! و این ${a}، دکتر خواب است. یک خواب نرم و راحت به تو می‌دهد و تمام وقت کنارت می‌ماند.`,
+           (s,a,p,q,w)=>`${s} جراح توست. ${w}. ${a} دکتری است که کمک می‌کند بخوابی و تمام مدت مانیتور را نگاه می‌کند.`,
+           (s,a,p,q,w)=>`${s}، جراحت، ${w}. ${a}، متخصص بیهوشی‌ات، داروی بیهوشی را می‌دهد، تو را در خوابی امن نگه می‌دارد و تا بیدار شوی، قلب و تنفست را زیر نظر دارد.`],
+  welcomeT:"آماده شدن برای جراحی، با هم",welcomeS:"برای کودکان و خانواده‌ها: چه انتظاری داشته باشید، چطور آماده شوید و چطور در خانه بهبود یابید.",
+  phone:"شماره موبایل (اختیاری)",phoneNote:"در نسخه کامل، مرکز درمانی می‌تواند یادآوری بفرستد، مثلاً زمان قطع غذا. در این نمونه اولیه چیزی ذخیره نمی‌شود.",go:"شروع",
+  s4:"نوع عمل را انتخاب کنید",s4sub:"فقط عمل‌هایی که جراح شما انجام می‌دهد نمایش داده می‌شود. به‌مرور عمل‌های بیشتری اضافه می‌شود.",soon:"به‌زودی",uroRole:"جراح · ارولوژی کودکان",exit:"خروج و بازگشت به صفحه خوش‌آمد",
+  helloSub:n=>`همه چیز درباره عمل ${n}، یک‌جا.`,
+  playT:"با هم بازی کنیم",playS:"برای کوچولوها: کنار هم بنشینید و روی تصویرها بزنید",toRoles:"بازگشت به انتخاب کاربر",
+  tip:"کنار کودکتان بنشینید، با هم روی تصویرها بزنید و جمله‌های کوتاه را بلند برایش بخوانید.",read:"🔊 بلند بخوان",
+  hrLbl:"محدوده طبیعی بیداری برای این سن",hr1:h=>`قلبت هر دقیقه حدود ${h} بار می‌زند!`,hr2:(l,h)=>`در حال استراحت، ضربان طبیعی قلب برای سن تو حدود ${l} تا ${h} بار در دقیقه است. وقتی نگرانی، ممکن است کمی تندتر بزند و این طبیعی است.`,
+  fingerOn:"نور انگشتی را بگذار",fingerOff:"نور انگشتی را بردار",
+  finger:["این نور قرمز کوچولو انگشتت را آرام بغل می‌کند. اصلاً درد ندارد!","این نور انگشتی بررسی می‌کند چقدر اکسیژن، یعنی همان هوایی که نفس می‌کشی، در خونت هست. خط موج‌دار با هر ضربان قلبت حرکت می‌کند.","پالس‌اکسی‌متر با تاباندن نور قرمز از انگشتت، اشباع اکسیژن خون (SpO₂) را اندازه می‌گیرد. موج، نبض توست و ۹۵ تا ۱۰۰ درصد طبیعی است."]}
+};
+const SURG={
+ tonsil:{spec:"ent",name:{en:"Tonsillectomy",fa:"جراحی لوزه"},desc:{en:"Removal of the tonsils",fa:"برداشتن لوزه‌ها"},
+  kid:{en:["makes your throat better","fixes your tonsils so you can breathe and sleep better","will remove your tonsils"],fa:["گلویت را خوب می‌کند","لوزه‌هایت را درست می‌کند تا بهتر نفس بکشی و بخوابی","لوزه‌هایت را برمی‌دارد"]},
+  q2:{en:"Is your child drinking?",fa:"کودک مایعات می‌نوشد؟"},alerts:{en:S.en.alerts,fa:S.fa.alerts},careTitle:{en:S.en.foodTitle,fa:S.fa.foodTitle},
+  yes:{en:S.en.foodYes,fa:S.fa.foodYes},no:{en:S.en.foodNo,fa:S.fa.foodNo},eat:{en:S.en.answers.eat,fa:S.fa.answers.eat},pain:{en:S.en.answers.pain,fa:S.fa.answers.pain}},
+ circ:{spec:"uro",name:{en:"Circumcision",fa:"ختنه"},desc:{en:"A common day surgery in boys",fa:"عمل سرپایی رایج در پسران"},
+  kid:{en:["does a small operation to help you stay healthy","does a small operation where you pee, to help you stay healthy","will do your circumcision, a small operation on the foreskin"],fa:["یک عمل کوچک انجام می‌دهد تا سالم بمانی","یک عمل کوچک در جایی که از آن جیش می‌کنی انجام می‌دهد تا سالم بمانی","ختنه را انجام می‌دهد؛ یک عمل کوچک روی پوست سر آلت"]},
+  q2:{en:"Is your child passing urine normally?",fa:"کودک به‌طور عادی ادرار می‌کند؟"},
+  alerts:{en:["Bleeding that doesn't stop after 10 minutes of gentle pressure","Not passing urine for many hours","Fever, or increasing redness, swelling or pus","Severe pain despite pain medicine"],fa:["خونریزی که با ۱۰ دقیقه فشار ملایم بند نمی‌آید","چند ساعت ادرار نکردن","تب، یا قرمزی، تورم یا چرک رو به افزایش","درد شدید با وجود داروی مسکن"]},
+  careTitle:{en:"Care at home",fa:"مراقبت در خانه"},
+  yes:{en:"Usually helpful (if your surgeon agrees): loose clothing, keeping the area clean as advised, pain medicine as prescribed, normal food and drink once fully awake.",fa:"معمولاً مفید (با تأیید جراح): لباس گشاد، تمیز نگه داشتن ناحیه طبق دستور، داروی مسکن طبق تجویز، خوردن و نوشیدن عادی پس از بیداری کامل."},
+  no:{en:"Usually avoid: tight clothes or nappies, bike riding or straddle toys for a few days, removing the dressing unless told to.",fa:"معمولاً پرهیز شود: لباس یا پوشک تنگ، دوچرخه‌سواری یا اسباب‌بازی‌هایی که رویش می‌نشیند برای چند روز، برداشتن پانسمان مگر طبق دستور."},
+  eat:{en:"Your child can usually eat and drink normally once fully awake and not feeling sick.",fa:"معمولاً وقتی کودک کاملاً بیدار است و حالت تهوع ندارد، می‌تواند به‌طور عادی بخورد و بنوشد."},
+  pain:{en:"Some soreness is expected for a few days. Give pain medicine exactly as your surgeon prescribed.",fa:"کمی درد تا چند روز طبیعی است. داروی مسکن را دقیقاً طبق دستور جراح بدهید."}}
+};
+const SOON={ent:{en:"Ear tubes (grommets)",fa:"لوله‌گذاری گوش"},uro:{en:"Hypospadias repair",fa:"ترمیم هیپوسپادیاس"}};
+const st = {welcome:true, role:null, finger:false, surg:null, setup:1, child:{name:"Ali",age:6,weight:20}, centre:null, surgeon:null, lang:"en", tab:"home", age:1, ktab:"team", leads:[], bfly:"blue", face:null, drink:null, sleep:null, logs:[], chat:[], time:"08:45"};
+const T = () => S[st.lang];
+const $ = id => document.getElementById(id);
+let raf = null;
+
+function fa(n){ return st.lang==="fa" ? String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]) : String(n); }
+function shift(time, h){ const [a,b]=time.split(":").map(Number); let m=a*60+b-h*60; m=(m+1440)%1440; return fa(String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")); }
+
+const C=()=>CENTRES.find(c=>c.id===st.centre);
+const SG=()=>C()&&C().surgeons.find(x=>x.id===st.surgeon);
+const L=o=>o[st.lang];
+const SU=()=>SURG[st.surg]||SURG.tonsil;
+const roleOf=x=>x.spec==="uro"?X[st.lang].uroRole:X[st.lang].surgeonRole;
+function setup(){ const t=X[st.lang]; const c=C();
+  if(st.welcome) return `<div style="text-align:center;padding-top:10px">
+    <svg viewBox="0 0 200 110" aria-hidden="true" style="width:220px"><g fill="none" stroke-width="12" stroke-linecap="round"><path d="M20 100 a80 80 0 0 1 160 0" stroke="var(--red)"/><path d="M36 100 a64 64 0 0 1 128 0" stroke="var(--yellow)"/><path d="M52 100 a48 48 0 0 1 96 0" stroke="var(--green)"/><path d="M68 100 a32 32 0 0 1 64 0" stroke="var(--blue)"/></g></svg>
+    <h1 style="margin-top:8px">${t.welcomeT}</h1><p class="muted">${t.welcomeS}</p></div>
+    <div class="block"><label for="phone"><b>${t.phone}</b></label><input id="phone" type="tel" inputmode="tel" autocomplete="off" style="width:100%;margin:8px 0;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--paper)"><p class="note">${t.phoneNote}</p></div>
+    <button class="btn" type="button" id="goBtn" style="width:100%">${t.go}</button>`;
+  const bar=`<div class="stepper">${[1,2,3,4].map(i=>`<span class="${i<=st.setup?"on":""}"></span>`).join("")}</div>`;
+  if(st.setup===1) return `<h1>${t.setupTitle}</h1>${bar}<h2>${t.childTitle}</h2><p class="muted">${t.childSub}</p>
+    <div class="block"><label class="planner" style="justify-content:space-between">${t.cname}<input id="cname" value="${st.child.name}" style="width:55%"></label>
+    <label class="planner" style="justify-content:space-between">${t.cage}<input id="cage" type="number" min="1" max="17" value="${st.child.age}" style="width:40%"></label>
+    <label class="planner" style="justify-content:space-between">${t.cweight}<input id="cweight" type="number" min="3" max="150" value="${st.child.weight}" style="width:40%"></label>
+    <p class="note" id="cerr" role="alert"></p></div>
+    <div class="row"><button class="btn ghost" type="button" id="backWelcome">${t.back}</button><button class="btn" type="button" data-setup="2">${t.next}</button></div>`;
+  if(st.setup===2) return `<h1>${t.setupTitle}</h1>${bar}<h2>${t.s1}</h2><p class="muted">${t.s1sub}</p>
+    <div class="pick">${CENTRES.map(x=>`<button type="button" class="opt" data-centre="${x.id}" aria-pressed="${st.centre===x.id}"><b>${L(x.name)}</b><span>${L(x.city)}</span></button>`).join("")}
+    <button type="button" class="opt" disabled><b>${t.more}</b></button></div>
+    <div class="row"><button class="btn ghost" type="button" data-setup="1">${t.back}</button><button class="btn" type="button" data-setup="3" ${st.centre?"":"disabled"}>${t.next}</button></div>`;
+  if(st.setup===3) return `<h1>${t.setupTitle}</h1>${bar}<h2>${t.s2}</h2><p class="muted">${t.s2sub}</p>
+    <div class="pick">${c.surgeons.map(x=>`<button type="button" class="opt" data-surgeon="${x.id}" aria-pressed="${st.surgeon===x.id}"><b>${L(x.name)}</b><span>${roleOf(x)}</span></button>`).join("")}</div>
+    <div class="row"><button class="btn ghost" type="button" data-setup="2">${t.back}</button><button class="btn" type="button" data-setup="4" ${st.surgeon?"":"disabled"}>${t.next}</button></div>`;
+  if(st.setup===4){ const sp=SG().spec; return `<h1>${t.setupTitle}</h1>${bar}<h2>${t.s4}</h2><p class="muted">${t.s4sub}</p>
+    <div class="pick">${Object.entries(SURG).filter(([k,v])=>v.spec===sp).map(([k,v])=>`<button type="button" class="opt" data-surg="${k}" aria-pressed="${st.surg===k}"><b>${L(v.name)}</b><span>${L(v.desc)}</span></button>`).join("")}
+    <button type="button" class="opt" disabled><b>${L(SOON[sp])}</b><span>${t.soon}</span></button></div>
+    <div class="row"><button class="btn ghost" type="button" data-setup="3">${t.back}</button><button class="btn" type="button" data-setup="0" ${st.surg?"":"disabled"}>${t.startApp}</button></div>`; }
+  return `<h1>${t.setupTitle}</h1>${bar}<h2>${t.s3}</h2><p class="muted">${t.s3sub}</p>${teamHTML()}
+    <div class="row"><button class="btn ghost" type="button" data-setup="4">${t.back}</button><button class="btn" type="button" data-setup="0">${t.startApp}</button></div>`;
+}
+function docSVG(g,role){
+  const cap=role==="sur"?"#5B8DEF":"#3FA877", scrub=role==="sur"?"#A9C5F7":"#A6DDBE", dark=role==="sur"?"#3C6BD0":"#2E8A5C";
+  return `<svg viewBox="0 0 120 140" role="img" aria-hidden="true" style="width:100%;max-width:130px">
+  ${g==="f"?`<path d="M31 52 q0 42 12 48 h34 q12 -6 12 -48 z" fill="#4A2E22"/>`:""}
+  <rect x="20" y="90" width="80" height="50" rx="26" fill="${scrub}"/>
+  <path d="M48 90 L60 106 L72 90" fill="none" stroke="${dark}" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="60" cy="58" r="28" fill="#F3C6A0"/>
+  <path d="M32 52 q0 -30 28 -30 q28 0 28 30 q-28 -9 -56 0z" fill="${cap}"/>
+  ${role==="sur"?`<circle cx="48" cy="38" r="2.5" fill="#fff"/><circle cx="62" cy="33" r="2.5" fill="#fff"/><circle cx="74" cy="40" r="2.5" fill="#fff"/>`:`<circle cx="60" cy="34" r="3" fill="#FFE08A"/>`}
+  <circle cx="50" cy="60" r="3.2" fill="#1D2B3A"/><circle cx="70" cy="60" r="3.2" fill="#1D2B3A"/>
+  <circle cx="44" cy="68" r="4" fill="#F59BA8" opacity=".6"/><circle cx="76" cy="68" r="4" fill="#F59BA8" opacity=".6"/>
+  <path d="M51 70 q9 8 18 0" stroke="#1D2B3A" stroke-width="3" fill="none" stroke-linecap="round"/>
+  ${role==="sur"?`<path d="M44 94 q-4 22 16 24 q20 -2 16 -24" fill="none" stroke="#2D3A4A" stroke-width="3"/><circle cx="60" cy="119" r="5" fill="#8A9BAA"/>`
+  :`<rect x="47" y="84" width="26" height="11" rx="5" fill="#E8F4FA" stroke="#9CC" stroke-width="1.5"/><circle cx="86" cy="116" r="9" fill="#FFE08A"/><circle cx="90" cy="113" r="8" fill="${scrub}"/>`}
+  </svg>`; }
+function teamHTML(){ const t=X[st.lang], c=C(), sg=SG(); return `<div class="team">
+  <div class="doc"><div class="av" aria-hidden="true">🩺</div><div><b>${L(sg.name)}</b><small>${roleOf(sg)}</small>${t.surgeonDo}</div></div>
+  <div class="doc"><div class="av" aria-hidden="true">😴</div><div><b>${L(c.anes.name)}</b><small>${t.anesRole}</small>${t.anesDo}</div></div></div>`; }
+function instrHTML(){ const t=X[st.lang], sg=SG(); return `<div class="instr" role="note"><b>${t.instrFrom} ${L(sg.name)}</b>${L(sg.note)}</div>`; }
+
+function renderChrome(){
+  const t=T();
+  document.documentElement.lang = st.lang; document.documentElement.dir = st.lang==="fa"?"rtl":"ltr";
+  $("brand").innerHTML = `${t.brand}<small>${t.brandSub}</small>`;
+  $("langBtn").textContent = t.lang;
+  $("proto").textContent = t.proto;
+  const items=[["prep","🗓️"],["after","🩹"],["ask","💬"]];
+  const navOn = !(st.welcome||st.setup>0) && st.role==="parent";
+  $("nav").hidden = !navOn; $("nav").style.gridTemplateColumns="repeat(3,1fr)";
+  $("nav").innerHTML = items.map(([k,e])=>`<button type="button" data-tab="${k}" ${st.tab===k?'aria-current="page"':''}><span class="em" aria-hidden="true">${e}</span>${t.nav[k]}</button>`).join("");
+}
+
+function home(){ const t=T(); return `
+  <div class="hello"><h1>${X[st.lang].hello(st.child.name)}</h1><p class="muted">${X[st.lang].helloSub(st.child.name)}</p></div>
+  <div class="surgery"><div><b>${L(SU().name)}</b><span>${L(C().name)}</span></div><div class="count">${fa(3)}<small>${t.days}</small></div></div>
+  ${instrHTML()}
+  <h2>${t.rolesTitle}</h2>
+  <div class="roles">
+    <button class="role" type="button" data-role="parent"><span class="em" aria-hidden="true">👩‍👧</span><b>${t.parent}</b><span>${t.parentSub}</span></button>
+    <button class="role kid" type="button" data-role="kid"><span class="em" aria-hidden="true">🌈</span><b>${st.age===0?X[st.lang].playT:t.kid}</b><span>${st.age===0?X[st.lang].playS:t.kidSub}</span></button>
+  </div>
+  <p style="margin-top:16px"><button class="linkbtn" type="button" data-setup="1">${X[st.lang].change}</button></p>
+  <p><button class="linkbtn" type="button" id="exitBtn">${X[st.lang].exit}</button></p>`; }
+
+function prep(){ const t=T(), x=X[st.lang], c=C(); return `
+  <h1>${t.prepTitle}</h1><p class="muted">${t.prepSub}</p>
+  ${instrHTML()}
+  <section class="block"><h2>${x.s3}</h2>${teamHTML()}<p class="note">${c.recovery?x.recYes:x.recNo}</p></section>
+  <section class="block"><ol class="steps">${t.steps.map((s,i)=>`<li><time>${i===0?fa(c.arrive):s[0]}</time><b>${s[1]}</b><div class="muted">${s[2]}</div></li>`).join("")}</ol></section>
+  <section class="block"><h2>${t.fastTitle}</h2><p class="muted">${t.fastSub}</p>
+    <label class="planner">${t.surgTime} <input type="time" id="stime" value="${st.time}"></label>
+    <div class="fast"><div>${t.solids}<b>${shift(st.time,c.solids)}</b></div><div>${t.fluids}<b>${shift(st.time,c.fluids)}</b></div></div>
+    <p class="note"><b>${x.protocol}:</b> ${x.protoFast(fa(c.solids),fa(c.fluids))} ${st.lang==="en"?"Always follow your care team's instructions.":"همیشه از دستور تیم درمان پیروی کنید."}</p></section>
+  <section class="block"><h2>${t.talkTitle}</h2><ul>${t.talk.map(x=>`<li>${x}</li>`).join("")}</ul></section>`; }
+
+function bodySVG(){
+  const spot = (c,x,y,on)=> on ? `<circle cx="${x}" cy="${y}" r="9" fill="${c}" stroke="#fff" stroke-width="3"/>` : `<circle cx="${x}" cy="${y}" r="9" fill="none" stroke="${c}" stroke-width="2.5" stroke-dasharray="4 3"/>`;
+  const on=k=>st.leads.includes(k);
+  return `<svg viewBox="0 0 150 190" role="img" aria-label="Cartoon friend">
+    <circle cx="75" cy="38" r="28" fill="#F6C9A5"/><circle cx="65" cy="36" r="3" fill="#1D2B3A"/><circle cx="85" cy="36" r="3" fill="#1D2B3A"/>
+    <path d="M66 48 q9 7 18 0" stroke="#1D2B3A" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M47 24 q28 -26 56 0" fill="#5A3A2A"/>
+    <rect x="35" y="68" width="80" height="92" rx="30" fill="#BFE3F2"/>
+    <rect x="16" y="76" width="24" height="64" rx="12" fill="#BFE3F2"/><rect x="110" y="76" width="24" height="64" rx="12" fill="#BFE3F2"/>
+    ${spot("var(--red)",52,88,on("red"))}${spot("var(--yellow)",98,88,on("yellow"))}${spot("var(--green)",98,138,on("green"))}
+  </svg>`; }
+
+function kid(){ const t=T(); const a=st.age; const tabs=[["team","👩‍⚕️"],["leads","🎨"],["mon","📺"],["bfly","🦋"],["mask","✈️"]];
+  let inner="";
+  if(st.ktab==="team"){ const x=X[st.lang]; const pr=g=>g==="m"?"He":"She";
+    inner=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:center"><figure style="margin:0">${docSVG(SG().g,"sur")}<figcaption><b>${L(SG().first)}</b></figcaption></figure><figure style="margin:0">${docSVG(C().anes.g,"ane")}<figcaption><b>${L(C().anes.first)}</b></figcaption></figure></div><p style="margin-top:12px;font-size:17px">${x.kidTeam[a](L(SG().first),L(C().anes.first),pr(SG().g),pr(C().anes.g),L(SU().kid)[a])}</p>`; }
+  else if(st.ktab==="leads"){
+    const all=st.leads.length===3;
+    inner=`<p>${t.leadsIntro[a]}</p>
+      <div class="body-wrap">${bodySVG()}<div class="stickers">${["red","yellow","green"].map(c=>`<button type="button" class="sticker" data-lead="${c}" aria-pressed="${st.leads.includes(c)}"><i style="background:var(--${c})"></i>${t.stick}: ${t[c]}</button>`).join("")}</div></div>
+      ${monitorHTML()}${all?`<div class="done" role="status">${t.leadsDone[a]}</div>`:""}`;
+  } else if(st.ktab==="mon"){ const x=X[st.lang];
+    inner=`<p>${t.monText[a]}</p>${a===1?`<p>${x.hr1(fa(hrNow()))}</p>`:a===2?`<p>${x.hr2(fa(hrRange()[0]),fa(hrRange()[1]))}</p>`:""}<p>${x.finger[a]}</p>
+    <div class="row" style="align-items:center;margin-bottom:12px"><svg viewBox="0 0 90 120" aria-hidden="true" style="width:70px"><rect x="28" y="10" width="34" height="100" rx="17" fill="#F3C6A0"/><rect x="30" y="14" width="30" height="18" rx="8" fill="#F8DCC6"/>${st.finger?`<circle cx="45" cy="38" r="22" fill="#FF3B3B" opacity=".25"/><rect x="18" y="26" width="54" height="26" rx="8" fill="#3E7BE0"/><circle cx="45" cy="39" r="4" fill="#FF5252"/>`:""}</svg>
+    <button class="btn" type="button" id="fingerBtn">${st.finger?x.fingerOff:x.fingerOn}</button></div>${monitorHTML(true)}`; }
+  else if(st.ktab==="bfly"){ const x=X[st.lang], gs=gauges(), nm=st.child.name;
+    const wing=c=>`<svg viewBox="0 0 200 120" role="img" aria-label="cannula" style="width:46%;max-width:150px"><g fill="${c}"><path d="M100 60 C60 0 10 20 40 60 C10 100 60 120 100 60Z"/><path d="M100 60 C140 0 190 20 160 60 C190 100 140 120 100 60Z"/></g><rect x="96" y="40" width="8" height="40" rx="4" fill="#1D2B3A"/><rect x="99" y="80" width="2" height="34" fill="#9AA"/></svg>`;
+    const names=gs.map(g=>G[g][st.lang]).join(" "+x.or+" ");
+    inner=`<p>${x.bfly[a](nm)} <b>${names}</b>.</p><div class="row" style="justify-content:center">${gs.map(g=>wing(G[g].c)).join("")}</div>
+      <p class="note">${x.gNote(nm,fa(st.child.age),fa(st.child.weight),gs.map(g=>fa(g)+"G ("+G[g][st.lang]+")").join(" "+x.or+" "))}</p>`;
+  } else {
+    inner=`<p>${t.maskText[a]}</p><div class="block" style="text-align:center"><h3>${t.breathe}</h3><div class="balloon-wrap"><div class="balloon" id="balloon"></div></div><p class="breath-label" id="blabel" aria-live="polite"></p><button class="btn" type="button" id="breathBtn">${t.start}</button></div>`;
+  }
+  return `<h1>${t.kidTitle}</h1><p class="muted">${t.kidSub}</p>
+    ${a===0?`<div class="instr" role="note">${X[st.lang].tip}</div>`:""}
+    <div class="tabs-kid">${tabs.map(([k,e])=>`<button type="button" data-ktab="${k}" aria-pressed="${st.ktab===k}"><span class="em" aria-hidden="true">${e}</span>${k==="team"?X[st.lang].teamTab:t.ktabs[k]}</button>`).join("")}</div>
+    <section class="block${a===0?" little":""}" id="kblock">${a===0?`<p><button class="btn ghost" type="button" id="readBtn">${X[st.lang].read}</button></p>`:""}${inner}</section>`; }
+
+function monitorHTML(force){ const on = force || st.leads.length===3, ox=st.finger;
+  return `<div class="monitor"><div class="mon-top"><span>ECG</span><span>${on?'<span class="hr">'+fa(hrNow())+'</span> bpm':'--'}</span></div><div class="mon-top" style="font-size:11.5px;opacity:.8"><span>${X[st.lang].hrLbl}</span><span>${fa(hrRange()[0])}–${fa(hrRange()[1])}</span></div><canvas id="ecg" data-on="${on?1:0}" width="600" height="140"></canvas>
+  <div class="mon-top"><span>SpO₂ · Pleth</span><span>${ox?'<span class="hr" style="color:#4FC3F7">'+fa(99)+'</span> %':'--'}</span></div><canvas id="pleth" data-on="${ox?1:0}" width="600" height="100"></canvas></div>`; }
+
+function after(){ const t=T(); const faces=["😀","🙂","😐","🙁","😣","😭"];
+  return `<h1>${t.afterTitle}</h1>
+  <section class="alert" role="region" aria-label="${t.alertTitle}"><h3>${t.alertTitle}</h3><ul>${L(SU().alerts).map(x=>`<li>${x}</li>`).join("")}</ul><button class="btn" type="button" style="background:var(--alert)">${t.alertBtn}</button></section>
+  <section class="block"><h2>${t.checkTitle}</h2><p class="muted">${t.checkSub}</p>
+    <h3>${t.pain}</h3><div class="faces">${faces.map((f,i)=>`<button type="button" data-face="${i}" aria-pressed="${st.face===i}" aria-label="${fa(i*2)}/10">${f}</button>`).join("")}</div>
+    <h3>${L(SU().q2)}</h3><div class="toggle-row">${["yes","some","no"].map(k=>`<button type="button" data-drink="${k}" aria-pressed="${st.drink===k}">${t[k]}</button>`).join("")}</div>
+    <h3>${t.sleep}</h3><div class="toggle-row">${["yes","some","no"].map(k=>`<button type="button" data-sleep="${k}" aria-pressed="${st.sleep===k}">${t[k]}</button>`).join("")}</div>
+    <button class="btn" type="button" id="saveCheck">${t.save}</button>
+    ${st.logs.length?`<h3 style="margin-top:14px">${t.logTitle}</h3><ul class="log">${st.logs.map(l=>`<li>${faces[l.face]??"–"} · ${L(SU().q2).replace(/[?؟]/,"")}: ${t[l.drink]??"–"} · ${t.sleep.replace("?","")}: ${t[l.sleep]??"–"}</li>`).join("")}</ul><p class="note">${t.logged}</p>`:""}
+  </section>
+  <section class="block"><h2>${L(SU().careTitle)}</h2><div class="food"><div class="yes">${L(SU().yes)}</div><div class="no">${L(SU().no)}</div></div><p class="note">${t.foodNote}</p></section>`; }
+
+function ask(){ const t=T(); return `<h1>${t.askTitle}</h1><p class="muted">${t.askSub}</p>
+  <div class="chat" aria-live="polite">${st.chat.map(m=>m.who==="me"?`<div class="msg me">${m.text}</div>`:`<div class="msg bot ${m.urgent?"urgent":""}">${m.text}${m.urgent?"":`<span class="src">${t.src}</span>`}</div>`).join("")}</div>
+  <div class="chips">${t.chips.map((c,i)=>`<button type="button" data-chip="${i}">${c}</button>`).join("")}</div>
+  <form class="ask-row" id="askForm"><input id="q" placeholder="${t.placeholder}" aria-label="${t.placeholder}"><button class="btn" type="submit">${t.send}</button></form>`; }
+
+function answer(q){ const t=T(); const s=q.toLowerCase();
+  if(/blood|bleed|خون/.test(s)) return {text:t.urgent, urgent:true};
+  if(/after|eat after|بعد/.test(s)&&/eat|food|غذا|بخور/.test(s)) return {text:L(SU().eat)};
+  if(/stop|fast|before|ناشتا|از کی|قبل/.test(s)) return {text: X[st.lang].protocol+": "+X[st.lang].protoFast(fa(C().solids),fa(C().fluids))+" "+(st.lang==="en"?"The fasting planner on 'Get ready' works out the exact times for you.":"برنامه‌ریز ناشتایی در بخش «آمادگی» زمان دقیق را برایتان حساب می‌کند.")};
+  if(/eat|food|drink|غذا|بخور|نوش/.test(s)) return {text:L(SU().eat)};
+  if(/pain|hurt|درد/.test(s)) return {text:L(SU().pain)};
+  return {text:t.answers.unknown};
+}
+
+function render(){
+  cancelAnimationFrame(raf);
+  renderChrome();
+  if(!(st.welcome||st.setup>0) && !st.role) st.tab="home";
+  let v= (st.welcome||st.setup>0) ? setup() : {home,prep,kid,after,ask}[st.tab]();
+  if(!(st.welcome||st.setup>0) && st.role) v=`<p style="margin:0 0 10px"><button class="linkbtn" type="button" id="toRoles">${st.lang==="fa"?"→":"←"} ${X[st.lang].toRoles}</button></p>`+v;
+  $("main").innerHTML=v;
+  const c=$("ecg"); if(c) drawECG(c);
+}
+
+function drawECG(c){
+  const ctx=c.getContext("2d"), W=c.width, H=c.height, on=c.dataset.on==="1";
+  const pc=$("pleth"), pctx=pc&&pc.getContext("2d"), pon=pc&&pc.dataset.on==="1";
+  const P=Math.round(150*92/hrNow());
+  const pl=x=>{ const t=(x%P)/P; if(t<.18) return -34*Math.sin(t/.18*Math.PI/2); const d=t-.18; return -34*Math.exp(-d*3.2)*(1+.18*Math.sin(d*28)); };
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const beat=x=>{ const p=x%P; if(p<10) return 0; if(p<16) return -8; if(p<20) return 4; if(p<26) return -62; if(p<32) return 30; if(p<40) return 0; if(p<62) return -12*Math.sin((p-40)/22*Math.PI); return 0; };
+  let off=0;
+  const frame=()=>{
+    ctx.clearRect(0,0,W,H); ctx.lineWidth=3; ctx.strokeStyle=on?"#5BE38A":"#3a5a52"; ctx.beginPath();
+    for(let x=0;x<W;x++){ const y=H/2+(on?beat(x+off):0); x?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+    ctx.stroke();
+    if(pctx){ const PW=pc.width, PH=pc.height; pctx.clearRect(0,0,PW,PH); pctx.lineWidth=3; pctx.strokeStyle=pon?"#4FC3F7":"#2f4a55"; pctx.beginPath();
+      for(let x=0;x<PW;x++){ const y=PH*.75+(pon?pl(x+off):0); x?pctx.lineTo(x,y):pctx.moveTo(x,y); } pctx.stroke(); }
+    off+=3; if(!reduce && (on||pon)) raf=requestAnimationFrame(frame);
+  }; frame();
+}
+
+let breathTimer=null;
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  if(b.id==="langBtn"){ st.lang=st.lang==="en"?"fa":"en"; st.chat=[]; render(); return; }
+  if(b.dataset.centre){ if(st.centre!==b.dataset.centre){st.centre=b.dataset.centre; st.surgeon=null; st.surg=null;} render(); return; }
+  if(b.dataset.role){ st.role=b.dataset.role; st.tab= st.role==="parent"?"prep":"kid"; render(); $("main").scrollTop=0; return; }
+  if(b.id==="toRoles"){ st.role=null; st.tab="home"; render(); return; }
+  if(b.id==="fingerBtn"){ st.finger=!st.finger; render(); return; }
+  if(b.id==="readBtn"){ const el=document.querySelector("#kblock p:not(:first-child)"); if(el && "speechSynthesis" in window){ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(el.textContent); u.lang= st.lang==="fa"?"fa-IR":"en-US"; u.rate=.9; speechSynthesis.speak(u);} return; }
+  if(b.id==="backWelcome"){ st.welcome=true; render(); return; }
+  if(b.id==="exitBtn"){ st.welcome=true; st.setup=1; st.tab="home"; st.role=null; render(); return; }
+  if(b.id==="goBtn"){ st.welcome=false; st.setup=1; render(); return; }
+  if(b.dataset.surgeon){ if(st.surgeon!==b.dataset.surgeon){st.surgeon=b.dataset.surgeon; st.surg=null;} render(); return; }
+  if(b.dataset.surg){ st.surg=b.dataset.surg; render(); return; }
+  if(b.dataset.setup!==undefined){
+    if(st.setup===1 && $("cage")){ const nm=$("cname").value.trim()||"Ali", ag=+$("cage").value, w=+$("cweight").value;
+      if(!(ag>=1&&ag<=17)||!(w>0)){ $("cerr").textContent=X[st.lang].need; return; }
+      st.child={name:nm.replace(/</g,""),age:ag,weight:w}; st.age= ag<=5?0: ag<=9?1:2; }
+    st.setup=+b.dataset.setup; if(st.setup===0) st.tab="home"; render(); $("main").scrollTop=0; return; }
+  if(b.dataset.tab){ st.tab=b.dataset.tab; render(); $("main").scrollTop=0; return; }
+  if(b.dataset.age){ st.age=+b.dataset.age; render(); return; }
+  if(b.dataset.ktab){ st.ktab=b.dataset.ktab; clearInterval(breathTimer); render(); return; }
+  if(b.dataset.lead){ const k=b.dataset.lead; if(!st.leads.includes(k)) st.leads.push(k); else st.leads=st.leads.filter(x=>x!==k); render(); return; }
+  if(b.dataset.bfly){ st.bfly=b.dataset.bfly; render(); return; }
+  if(b.dataset.face){ st.face=+b.dataset.face; render(); return; }
+  if(b.dataset.drink){ st.drink=b.dataset.drink; render(); return; }
+  if(b.dataset.sleep){ st.sleep=b.dataset.sleep; render(); return; }
+  if(b.id==="saveCheck"){ st.logs.unshift({face:st.face,drink:st.drink,sleep:st.sleep}); st.face=st.drink=st.sleep=null; render(); return; }
+  if(b.dataset.chip){ const q=T().chips[+b.dataset.chip]; st.chat.push({who:"me",text:q}); st.chat.push(answer(q)); render(); return; }
+  if(b.id==="breathBtn"){ const bal=$("balloon"), lab=$("blabel"); let inhale=true, n=0; clearInterval(breathTimer);
+    const step=()=>{ bal.classList.toggle("in",inhale); lab.textContent=inhale?T().in:T().out; inhale=!inhale; if(++n>6){clearInterval(breathTimer); bal.classList.remove("in"); lab.textContent="✨";} };
+    step(); breathTimer=setInterval(step,4000); }
+});
+document.addEventListener("submit",e=>{ if(e.target.id==="askForm"){ e.preventDefault(); const q=$("q").value.trim(); if(!q) return; st.chat.push({who:"me",text:q.replace(/</g,"&lt;")}); st.chat.push(answer(q)); render(); }});
+document.addEventListener("input",e=>{ if(e.target.id==="stime" && e.target.value){ st.time=e.target.value; const p=document.querySelectorAll(".fast b"); p[0].textContent=shift(st.time,C().solids); p[1].textContent=shift(st.time,C().fluids); }});
+render();
+</script>
+</body>
+</html>
