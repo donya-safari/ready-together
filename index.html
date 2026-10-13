@@ -206,7 +206,7 @@ en:{
   parent:"I'm a parent", parentSub:"Plan the day, fasting, questions",
   kid:"I'm a kid", kidSub:"Meet the operating room",
   prepTitle:"The day of surgery", prepSub:"What happens, step by step.",
-  steps:[["7:00–7:30","Arrive and register","Bring the child's ID and any medicines."],["About 8:30","Nurse and doctor visit","Your child changes into hospital clothes."],["About 8:45","Goodbye at the operating room door","One parent can come back in recovery when the child is settled."],["About 45 min after","Recovery room","Then a few hours on the ward before going home."]],
+  steps:[["7:00–7:30","Arrive and register","Bring the child's ID and any medicines."],["About 8:30","Nurse and doctor visit","Your child changes into hospital clothes."],["About 8:45","Goodbye at the operating room door","Your child goes in with the anesthesia team. Your centre's recovery policy is shown above."],["About 45 min after","Recovery room","Then a few hours on the ward before going home."]],
   fastTitle:"Fasting planner", fastSub:"Enter the surgery start time your centre gave you.",
   surgTime:"Surgery time", solids:"Last food or milk", fluids:"Last clear drink",
   fastNote:"Example based on international paediatric guidance (food 6 h, clear fluids 1 h before). Your centre may give different times. Always follow your care team.",
@@ -257,7 +257,7 @@ fa:{
   parent:"من والد هستم", parentSub:"برنامه روز عمل، ناشتایی، پرسش‌ها",
   kid:"من بچه هستم", kidSub:"آشنایی با اتاق عمل",
   prepTitle:"روز عمل", prepSub:"چه اتفاقی می‌افتد، مرحله‌به‌مرحله.",
-  steps:[["۷ تا ۷:۳۰","رسیدن و پذیرش","مدارک کودک و داروهایش را همراه بیاورید."],["حدود ۸:۳۰","ویزیت پرستار و پزشک","کودک لباس بیمارستان می‌پوشد."],["حدود ۸:۴۵","خداحافظی دم در اتاق عمل","وقتی کودک آرام‌تر شد، یکی از والدین می‌تواند به ریکاوری بیاید."],["حدود ۴۵ دقیقه بعد","ریکاوری","سپس چند ساعت در بخش و بعد ترخیص."]],
+  steps:[["۷ تا ۷:۳۰","رسیدن و پذیرش","مدارک کودک و داروهایش را همراه بیاورید."],["حدود ۸:۳۰","ویزیت پرستار و پزشک","کودک لباس بیمارستان می‌پوشد."],["حدود ۸:۴۵","خداحافظی دم در اتاق عمل","کودک همراه تیم بیهوشی وارد می‌شود. سیاست مرکز درباره حضور در ریکاوری در بالا آمده است."],["حدود ۴۵ دقیقه بعد","ریکاوری","سپس چند ساعت در بخش و بعد ترخیص."]],
   fastTitle:"برنامه‌ریز ناشتایی", fastSub:"ساعت شروع عمل را که مرکز گفته وارد کنید.",
   surgTime:"ساعت عمل", solids:"آخرین غذا یا شیر", fluids:"آخرین نوشیدنی شفاف",
   fastNote:"نمونه بر اساس راهنمای بین‌المللی کودکان (غذا ۶ ساعت، مایعات شفاف ۱ ساعت قبل). ممکن است مرکز شما زمان دیگری بگوید. همیشه از دستور تیم درمان پیروی کنید.",
@@ -338,6 +338,10 @@ const X={
   welcomeT:"Getting ready for surgery, together",welcomeS:"For children and their families: what to expect, how to prepare, and how to recover at home.",
   phone:"Mobile number (optional)",phoneNote:"In the full version, your centre could send reminders, such as when to stop eating. Nothing is saved in this prototype.",go:"Get started",
   s4:"Choose the operation",s4sub:"Only operations your surgeon performs are shown. More will be added over time.",soon:"coming soon",uroRole:"Surgeon · Paediatric urology",exit:"Exit to the welcome screen",
+  talkAge:[w=>["Use very simple words and a calm voice: \"The doctors will help you feel better.\"","Make time concrete: \"We'll be apart for about as long as one of your cartoons, then I'll be right there.\"","Play doctor at home with a teddy: listen to its heart, stick a sticker on its chest, hold a cup over its nose like the pilot mask.","At this age, a day or two of warning is usually enough. Bring a favourite toy or blanket on the day."],
+           w=>[`Explain why, honestly and simply: "This operation will help you ${w}."`,"Answer questions truthfully. It's fine to say \"I don't know, let's ask the doctor together.\"","Explore Rainbow Leads together a few days before: the monitor, the stickers, the butterfly and the pilot mask.","Tell them who will look after them, and that you'll be there when they wake up."],
+           w=>["Include your child in conversations with the doctors and let them ask their own questions.","Give real information: what will happen, roughly how long it takes, and that some pain afterwards is normal and can be treated.","Ask what worries them most and take it seriously, even if it seems small.","Let them explore Rainbow Leads on their own first, then talk about it together. Respect their privacy where you can."]],
+  talkLast:"Whatever the age, your calm helps most. Children notice when parents are worried.",
   helloSub:n=>`Here's everything for ${n}'s surgery, in one place.`,
   playT:"Play together",playS:"For little ones: sit together and tap the pictures",toRoles:"Back to choose who's using the app",
   tip:"Sit with your child, tap the pictures together and read the short lines aloud.",read:"🔊 Read aloud",
@@ -365,6 +369,10 @@ const X={
   welcomeT:"آماده شدن برای جراحی، با هم",welcomeS:"برای کودکان و خانواده‌ها: چه انتظاری داشته باشید، چطور آماده شوید و چطور در خانه بهبود یابید.",
   phone:"شماره موبایل (اختیاری)",phoneNote:"در نسخه کامل، مرکز درمانی می‌تواند یادآوری بفرستد، مثلاً زمان قطع غذا. در این نمونه اولیه چیزی ذخیره نمی‌شود.",go:"شروع",
   s4:"نوع عمل را انتخاب کنید",s4sub:"فقط عمل‌هایی که جراح شما انجام می‌دهد نمایش داده می‌شود. به‌مرور عمل‌های بیشتری اضافه می‌شود.",soon:"به‌زودی",uroRole:"جراح · ارولوژی کودکان",exit:"خروج و بازگشت به صفحه خوش‌آمد",
+  talkAge:[w=>["با کلمات خیلی ساده و صدای آرام بگویید: «دکترها کمک می‌کنند حالت بهتر شود.»","زمان را ملموس کنید: «به اندازه یکی از کارتون‌هایت از هم جداییم و بعد من همان‌جا هستم.»","در خانه با یک عروسک دکتربازی کنید: به صدای قلبش گوش بدهید، یک برچسب روی سینه‌اش بچسبانید و یک لیوان را مثل ماسک خلبان روی بینی‌اش بگیرید.","در این سن معمولاً یکی دو روز قبل خبر دادن کافی است. روز عمل، عروسک یا پتوی محبوبش را همراه بیاورید."],
+           w=>[`دلیلش را صادقانه و ساده بگویید: «این عمل کمک می‌کند ${w}.»`,"به سؤال‌هایش راست جواب دهید. اشکالی ندارد بگویید «نمی‌دانم، بیا با هم از دکتر بپرسیم.»","چند روز قبل با هم بخش «لیدهای رنگین‌کمانی» را ببینید: مانیتور، برچسب‌ها، پروانه و ماسک خلبان.","بگویید چه کسی از او مراقبت می‌کند و وقتی بیدار شد شما کنارش هستید."],
+           w=>["کودکتان را در گفت‌وگو با پزشکان شریک کنید و بگذارید خودش سؤال بپرسد.","اطلاعات واقعی بدهید: چه اتفاقی می‌افتد، تقریباً چقدر طول می‌کشد، و اینکه کمی درد بعد از عمل طبیعی است و درمان دارد.","بپرسید بیشتر نگران چه چیزی است و آن را جدی بگیرید، حتی اگر کوچک به نظر برسد.","بگذارید اول خودش بخش «لیدهای رنگین‌کمانی» را ببیند و بعد با هم درباره‌اش صحبت کنید. تا جای ممکن به حریم خصوصی‌اش احترام بگذارید."]],
+  talkLast:"در هر سنی، آرامش شما بیشترین کمک است. بچه‌ها نگرانی والدین را حس می‌کنند.",
   helloSub:n=>`همه چیز درباره عمل ${n}، یک‌جا.`,
   playT:"با هم بازی کنیم",playS:"برای کوچولوها: کنار هم بنشینید و روی تصویرها بزنید",toRoles:"بازگشت به انتخاب کاربر",
   tip:"کنار کودکتان بنشینید، با هم روی تصویرها بزنید و جمله‌های کوتاه را بلند برایش بخوانید.",read:"🔊 بلند بخوان",
@@ -375,11 +383,11 @@ const X={
 const SURG={
  tonsil:{spec:"ent",name:{en:"Tonsillectomy",fa:"جراحی لوزه"},desc:{en:"Removal of the tonsils",fa:"برداشتن لوزه‌ها"},
   kid:{en:["makes your throat better","fixes your tonsils so you can breathe and sleep better","will remove your tonsils"],fa:["گلویت را خوب می‌کند","لوزه‌هایت را درست می‌کند تا بهتر نفس بکشی و بخوابی","لوزه‌هایت را برمی‌دارد"]},
-  q2:{en:"Is your child drinking?",fa:"کودک مایعات می‌نوشد؟"},alerts:{en:S.en.alerts,fa:S.fa.alerts},careTitle:{en:S.en.foodTitle,fa:S.fa.foodTitle},
+  why:{en:"breathe and sleep better at night",fa:"شب‌ها راحت‌تر نفس بکشی و بخوابی"},q2:{en:"Is your child drinking?",fa:"کودک مایعات می‌نوشد؟"},alerts:{en:S.en.alerts,fa:S.fa.alerts},careTitle:{en:S.en.foodTitle,fa:S.fa.foodTitle},
   yes:{en:S.en.foodYes,fa:S.fa.foodYes},no:{en:S.en.foodNo,fa:S.fa.foodNo},eat:{en:S.en.answers.eat,fa:S.fa.answers.eat},pain:{en:S.en.answers.pain,fa:S.fa.answers.pain}},
  circ:{spec:"uro",name:{en:"Circumcision",fa:"ختنه"},desc:{en:"A common day surgery in boys",fa:"عمل سرپایی رایج در پسران"},
   kid:{en:["does a small operation to help you stay healthy","does a small operation where you pee, to help you stay healthy","will do your circumcision, a small operation on the foreskin"],fa:["یک عمل کوچک انجام می‌دهد تا سالم بمانی","یک عمل کوچک در جایی که از آن جیش می‌کنی انجام می‌دهد تا سالم بمانی","ختنه را انجام می‌دهد؛ یک عمل کوچک روی پوست سر آلت"]},
-  q2:{en:"Is your child passing urine normally?",fa:"کودک به‌طور عادی ادرار می‌کند؟"},
+  why:{en:"stay healthy",fa:"سالم بمانی"},q2:{en:"Is your child passing urine normally?",fa:"کودک به‌طور عادی ادرار می‌کند؟"},
   alerts:{en:["Bleeding that doesn't stop after 10 minutes of gentle pressure","Not passing urine for many hours","Fever, or increasing redness, swelling or pus","Severe pain despite pain medicine"],fa:["خونریزی که با ۱۰ دقیقه فشار ملایم بند نمی‌آید","چند ساعت ادرار نکردن","تب، یا قرمزی، تورم یا چرک رو به افزایش","درد شدید با وجود داروی مسکن"]},
   careTitle:{en:"Care at home",fa:"مراقبت در خانه"},
   yes:{en:"Usually helpful (if your surgeon agrees): loose clothing, keeping the area clean as advised, pain medicine as prescribed, normal food and drink once fully awake.",fa:"معمولاً مفید (با تأیید جراح): لباس گشاد، تمیز نگه داشتن ناحیه طبق دستور، داروی مسکن طبق تجویز، خوردن و نوشیدن عادی پس از بیداری کامل."},
@@ -472,16 +480,16 @@ function home(){ const t=T(); return `
   <p style="margin-top:16px"><button class="linkbtn" type="button" data-setup="1">${X[st.lang].change}</button></p>
   <p><button class="linkbtn" type="button" id="exitBtn">${X[st.lang].exit}</button></p>`; }
 
-function prep(){ const t=T(), x=X[st.lang], c=C(); return `
+function prep(){ const t=T(), x=X[st.lang], c=C(), ab=st.lang==="fa"?"حدود":"About"; return `
   <h1>${t.prepTitle}</h1><p class="muted">${t.prepSub}</p>
   ${instrHTML()}
   <section class="block"><h2>${x.s3}</h2>${teamHTML()}<p class="note">${c.recovery?x.recYes:x.recNo}</p></section>
-  <section class="block"><ol class="steps">${t.steps.map((s,i)=>`<li><time>${i===0?fa(c.arrive):s[0]}</time><b>${s[1]}</b><div class="muted">${s[2]}</div></li>`).join("")}</ol></section>
+  <section class="block"><ol class="steps">${t.steps.map((s,i)=>`<li><time>${i===0?fa(c.arrive):i===1?ab+" "+shift(st.time,0.25):i===2?ab+" "+fa(st.time):s[0]}</time><b>${s[1]}</b><div class="muted">${s[2]}</div></li>`).join("")}</ol></section>
   <section class="block"><h2>${t.fastTitle}</h2><p class="muted">${t.fastSub}</p>
     <label class="planner">${t.surgTime} <input type="time" id="stime" value="${st.time}"></label>
     <div class="fast"><div>${t.solids}<b>${shift(st.time,c.solids)}</b></div><div>${t.fluids}<b>${shift(st.time,c.fluids)}</b></div></div>
     <p class="note"><b>${x.protocol}:</b> ${x.protoFast(fa(c.solids),fa(c.fluids))} ${st.lang==="en"?"Always follow your care team's instructions.":"همیشه از دستور تیم درمان پیروی کنید."}</p></section>
-  <section class="block"><h2>${t.talkTitle}</h2><ul>${t.talk.map(x=>`<li>${x}</li>`).join("")}</ul></section>`; }
+  <section class="block"><h2>${t.talkTitle} · ${t.ages[st.age]}</h2><ul>${x.talkAge[st.age](L(SU().why)).map(y=>`<li>${y}</li>`).join("")}</ul><p class="note">${x.talkLast}</p></section>`; }
 
 function bodySVG(){
   const spot = (c,x,y,on)=> on ? `<circle cx="${x}" cy="${y}" r="9" fill="${c}" stroke="#fff" stroke-width="3"/>` : `<circle cx="${x}" cy="${y}" r="9" fill="none" stroke="${c}" stroke-width="2.5" stroke-dasharray="4 3"/>`;
@@ -613,6 +621,7 @@ document.addEventListener("click",e=>{
     step(); breathTimer=setInterval(step,4000); }
 });
 document.addEventListener("submit",e=>{ if(e.target.id==="askForm"){ e.preventDefault(); const q=$("q").value.trim(); if(!q) return; st.chat.push({who:"me",text:q.replace(/</g,"&lt;")}); st.chat.push(answer(q)); render(); }});
+document.addEventListener("change",e=>{ if(e.target.id==="stime" && e.target.value){ st.time=e.target.value; render(); } });
 document.addEventListener("input",e=>{ if(e.target.id==="stime" && e.target.value){ st.time=e.target.value; const p=document.querySelectorAll(".fast b"); p[0].textContent=shift(st.time,C().solids); p[1].textContent=shift(st.time,C().fluids); }});
 render();
 </script>
