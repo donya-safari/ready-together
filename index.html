@@ -137,6 +137,13 @@ p{margin:0 0 12px}
 .food div{border-radius:14px;padding:12px;font-size:14.5px}
 .food .yes{background:var(--sage-soft)}
 .food .no{background:var(--alert-soft)}
+.cal{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.cal button{position:relative;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:6px 2px;display:flex;flex-direction:column;align-items:center;line-height:1.15;min-height:58px}
+.cal button b{font-family:var(--display);font-size:18px}
+.cal button small{font-size:11px;color:var(--muted)}
+.cal button[aria-pressed="true"]{border:2px solid var(--sage);background:var(--sage-soft)}
+.cal .dot{width:6px;height:6px;border-radius:50%;background:var(--sage);margin-top:3px}
+.cal .lg{font-size:14px}
 .log{list-style:none;padding:0;margin:8px 0 0;font-size:14.5px}
 .log li{border-top:1px solid var(--line);padding:8px 0}
 
@@ -228,7 +235,7 @@ en:{
   breathe:"Breathe with the balloon", start:"Start", in:"Breathe in…", out:"…and out",
   afterTitle:"After surgery at home", checkTitle:"Daily check-in", checkSub:"Day 1 after surgery",
   pain:"How much does it hurt?", drink:"Is your child drinking?", sleep:"Did your child sleep well?",
-  yes:"Yes", some:"A little", no:"No", save:"Save today's check-in",
+  yes:"Yes", some:"A little", no:"No", save:"Save this day's check-in",
   logged:"In the full version, check-ins can be shared with your care team.",
   logTitle:"Your check-ins",
   alertTitle:"Get help now if you see", alerts:["Bright red blood from the mouth or nose","Vomiting blood","Not drinking for many hours","High fever"],
@@ -279,7 +286,7 @@ fa:{
   breathe:"با بادکنک نفس بکش", start:"شروع", in:"نفس بکش…", out:"…و بیرون بده",
   afterTitle:"بعد از عمل، در خانه", checkTitle:"ثبت روزانه", checkSub:"روز اول بعد از عمل",
   pain:"چقدر درد دارد؟", drink:"کودک مایعات می‌نوشد؟", sleep:"خوب خوابید؟",
-  yes:"بله", some:"کمی", no:"نه", save:"ثبت امروز",
+  yes:"بله", some:"کمی", no:"نه", save:"ثبت این روز",
   logged:"در نسخه کامل، این ثبت‌ها می‌تواند با تیم درمان به اشتراک گذاشته شود.",
   logTitle:"ثبت‌های شما",
   alertTitle:"اگر این‌ها را دیدید، فوراً کمک بگیرید", alerts:["خون قرمز روشن از دهان یا بینی","استفراغ خونی","چند ساعت هیچ نوشیدنی نخوردن","تب بالا"],
@@ -338,6 +345,8 @@ const X={
   welcomeT:"Getting ready for surgery, together",welcomeS:"For children and their families: what to expect, how to prepare, and how to recover at home.",
   phone:"Mobile number (optional)",phoneNote:"In the full version, your centre could send reminders, such as when to stop eating. Nothing is saved in this prototype.",go:"Get started",
   s4:"Choose the operation",s4sub:"Only operations your surgeon performs are shown. More will be added over time.",soon:"coming soon",uroRole:"Surgeon · Paediatric urology",exit:"Exit to the welcome screen",
+  dateLbl:"Date of surgery",toGo:"days to go",todayS:"Surgery is today",afterD:"after surgery",dayWord:"Day",
+  calTitle:"Recovery calendar",calSub:"Tap a day, then fill in the check-in. Days marked with a dot are suggested check-in days (1, 2, 3, 7 and 15), following the schedule used in pediatric recovery research.",saved:"Saved",
   talkAge:[w=>["Use very simple words and a calm voice: \"The doctors will help you feel better.\"","Make time concrete: \"We'll be apart for about as long as one of your cartoons, then I'll be right there.\"","Play doctor at home with a teddy: listen to its heart, stick a sticker on its chest, hold a cup over its nose like the pilot mask.","At this age, a day or two of warning is usually enough. Bring a favourite toy or blanket on the day."],
            w=>[`Explain why, honestly and simply: "This operation will help you ${w}."`,"Answer questions truthfully. It's fine to say \"I don't know, let's ask the doctor together.\"","Explore Rainbow Leads together a few days before: the monitor, the stickers, the butterfly and the pilot mask.","Tell them who will look after them, and that you'll be there when they wake up."],
            w=>["Include your child in conversations with the doctors and let them ask their own questions.","Give real information: what will happen, roughly how long it takes, and that some pain afterwards is normal and can be treated.","Ask what worries them most and take it seriously, even if it seems small.","Let them explore Rainbow Leads on their own first, then talk about it together. Respect their privacy where you can."]],
@@ -369,6 +378,8 @@ const X={
   welcomeT:"آماده شدن برای جراحی، با هم",welcomeS:"برای کودکان و خانواده‌ها: چه انتظاری داشته باشید، چطور آماده شوید و چطور در خانه بهبود یابید.",
   phone:"شماره موبایل (اختیاری)",phoneNote:"در نسخه کامل، مرکز درمانی می‌تواند یادآوری بفرستد، مثلاً زمان قطع غذا. در این نمونه اولیه چیزی ذخیره نمی‌شود.",go:"شروع",
   s4:"نوع عمل را انتخاب کنید",s4sub:"فقط عمل‌هایی که جراح شما انجام می‌دهد نمایش داده می‌شود. به‌مرور عمل‌های بیشتری اضافه می‌شود.",soon:"به‌زودی",uroRole:"جراح · ارولوژی کودکان",exit:"خروج و بازگشت به صفحه خوش‌آمد",
+  dateLbl:"تاریخ عمل",toGo:"روز مانده",todayS:"عمل امروز است",afterD:"بعد از عمل",dayWord:"روز",
+  calTitle:"تقویم بهبودی",calSub:"روی یک روز بزنید و بعد ثبت روزانه را پر کنید. روزهای نقطه‌دار، روزهای پیشنهادی ثبت‌اند (۱، ۲، ۳، ۷ و ۱۵)، مطابق برنامه‌ای که در پژوهش‌های بهبودی کودکان به کار می‌رود.",saved:"ثبت شد",
   talkAge:[w=>["با کلمات خیلی ساده و صدای آرام بگویید: «دکترها کمک می‌کنند حالت بهتر شود.»","زمان را ملموس کنید: «به اندازه یکی از کارتون‌هایت از هم جداییم و بعد من همان‌جا هستم.»","در خانه با یک عروسک دکتربازی کنید: به صدای قلبش گوش بدهید، یک برچسب روی سینه‌اش بچسبانید و یک لیوان را مثل ماسک خلبان روی بینی‌اش بگیرید.","در این سن معمولاً یکی دو روز قبل خبر دادن کافی است. روز عمل، عروسک یا پتوی محبوبش را همراه بیاورید."],
            w=>[`دلیلش را صادقانه و ساده بگویید: «این عمل کمک می‌کند ${w}.»`,"به سؤال‌هایش راست جواب دهید. اشکالی ندارد بگویید «نمی‌دانم، بیا با هم از دکتر بپرسیم.»","چند روز قبل با هم بخش «لیدهای رنگین‌کمانی» را ببینید: مانیتور، برچسب‌ها، پروانه و ماسک خلبان.","بگویید چه کسی از او مراقبت می‌کند و وقتی بیدار شد شما کنارش هستید."],
            w=>["کودکتان را در گفت‌وگو با پزشکان شریک کنید و بگذارید خودش سؤال بپرسد.","اطلاعات واقعی بدهید: چه اتفاقی می‌افتد، تقریباً چقدر طول می‌کشد، و اینکه کمی درد بعد از عمل طبیعی است و درمان دارد.","بپرسید بیشتر نگران چه چیزی است و آن را جدی بگیرید، حتی اگر کوچک به نظر برسد.","بگذارید اول خودش بخش «لیدهای رنگین‌کمانی» را ببیند و بعد با هم درباره‌اش صحبت کنید. تا جای ممکن به حریم خصوصی‌اش احترام بگذارید."]],
@@ -385,18 +396,19 @@ const SURG={
   kid:{en:["makes your throat better","fixes your tonsils so you can breathe and sleep better","will remove your tonsils"],fa:["گلویت را خوب می‌کند","لوزه‌هایت را درست می‌کند تا بهتر نفس بکشی و بخوابی","لوزه‌هایت را برمی‌دارد"]},
   why:{en:"breathe and sleep better at night",fa:"شب‌ها راحت‌تر نفس بکشی و بخوابی"},q2:{en:"Is your child drinking?",fa:"کودک مایعات می‌نوشد؟"},alerts:{en:S.en.alerts,fa:S.fa.alerts},careTitle:{en:S.en.foodTitle,fa:S.fa.foodTitle},
   yes:{en:S.en.foodYes,fa:S.fa.foodYes},no:{en:S.en.foodNo,fa:S.fa.foodNo},eat:{en:S.en.answers.eat,fa:S.fa.answers.eat},pain:{en:S.en.answers.pain,fa:S.fa.answers.pain}},
- circ:{spec:"uro",name:{en:"Circumcision",fa:"ختنه"},desc:{en:"A common day surgery in boys",fa:"عمل سرپایی رایج در پسران"},
-  kid:{en:["does a small operation to help you stay healthy","does a small operation where you pee, to help you stay healthy","will do your circumcision, a small operation on the foreskin"],fa:["یک عمل کوچک انجام می‌دهد تا سالم بمانی","یک عمل کوچک در جایی که از آن جیش می‌کنی انجام می‌دهد تا سالم بمانی","ختنه را انجام می‌دهد؛ یک عمل کوچک روی پوست سر آلت"]},
-  why:{en:"stay healthy",fa:"سالم بمانی"},q2:{en:"Is your child passing urine normally?",fa:"کودک به‌طور عادی ادرار می‌کند؟"},
-  alerts:{en:["Bleeding that doesn't stop after 10 minutes of gentle pressure","Not passing urine for many hours","Fever, or increasing redness, swelling or pus","Severe pain despite pain medicine"],fa:["خونریزی که با ۱۰ دقیقه فشار ملایم بند نمی‌آید","چند ساعت ادرار نکردن","تب، یا قرمزی، تورم یا چرک رو به افزایش","درد شدید با وجود داروی مسکن"]},
+ hyp:{spec:"uro",name:{en:"Hypospadias repair",fa:"ترمیم هیپوسپادیاس"},desc:{en:"Surgery to correct the position of the urinary opening",fa:"جراحی برای اصلاح محل خروجی ادرار"},
+  why:{en:"pee normally and comfortably",fa:"راحت و درست جیش کنی"},
+  kid:{en:["fixes a little part of your body where you pee","fixes the place where you pee so it works well","will repair your urethra, the tube you pee through"],fa:["یک قسمت کوچک از بدنت را که از آن جیش می‌کنی درست می‌کند","جایی را که از آن جیش می‌کنی درست می‌کند تا خوب کار کند","مجرای ادرارت را ترمیم می‌کند؛ همان لوله‌ای که از آن ادرار می‌کنی"]},
+  q2:{en:"Is urine draining well (through the catheter, if there is one)?",fa:"ادرار به‌خوبی خارج می‌شود (از سوند، اگر دارد)؟"},
+  alerts:{en:["No urine coming out of the catheter or nappy for several hours","Bleeding that doesn't stop after 10 minutes of gentle pressure","Fever, or increasing redness, swelling or pus","The catheter falls out or the dressing comes off unexpectedly"],fa:["چند ساعت هیچ ادراری از سوند یا پوشک خارج نشود","خونریزی که با ۱۰ دقیقه فشار ملایم بند نمی‌آید","تب، یا قرمزی، تورم یا چرک رو به افزایش","سوند بیرون بیاید یا پانسمان به‌طور غیرمنتظره باز شود"]},
   careTitle:{en:"Care at home",fa:"مراقبت در خانه"},
-  yes:{en:"Usually helpful (if your surgeon agrees): loose clothing, keeping the area clean as advised, pain medicine as prescribed, normal food and drink once fully awake.",fa:"معمولاً مفید (با تأیید جراح): لباس گشاد، تمیز نگه داشتن ناحیه طبق دستور، داروی مسکن طبق تجویز، خوردن و نوشیدن عادی پس از بیداری کامل."},
-  no:{en:"Usually avoid: tight clothes or nappies, bike riding or straddle toys for a few days, removing the dressing unless told to.",fa:"معمولاً پرهیز شود: لباس یا پوشک تنگ، دوچرخه‌سواری یا اسباب‌بازی‌هایی که رویش می‌نشیند برای چند روز، برداشتن پانسمان مگر طبق دستور."},
-  eat:{en:"Your child can usually eat and drink normally once fully awake and not feeling sick.",fa:"معمولاً وقتی کودک کاملاً بیدار است و حالت تهوع ندارد، می‌تواند به‌طور عادی بخورد و بنوشد."},
-  pain:{en:"Some soreness is expected for a few days. Give pain medicine exactly as your surgeon prescribed.",fa:"کمی درد تا چند روز طبیعی است. داروی مسکن را دقیقاً طبق دستور جراح بدهید."}}
+  yes:{en:"Usually helpful (if your surgeon agrees): plenty of fluids, loose clothing, pain medicine as prescribed, and caring for the catheter and dressing exactly as you were shown.",fa:"معمولاً مفید (با تأیید جراح): نوشیدن مایعات کافی، لباس گشاد، داروی مسکن طبق تجویز، و مراقبت از سوند و پانسمان دقیقاً همان‌طور که آموزش دیده‌اید."},
+  no:{en:"Usually avoid: tight clothes, bathing or removing the dressing before your surgeon allows, straddle toys or bike riding, and pulling on the catheter.",fa:"معمولاً پرهیز شود: لباس تنگ، حمام کردن یا برداشتن پانسمان پیش از اجازه جراح، اسباب‌بازی‌هایی که رویش می‌نشیند یا دوچرخه‌سواری، و کشیدن سوند."},
+  eat:{en:"Your child can usually eat and drink normally once fully awake and not feeling sick. Plenty of fluids helps keep urine flowing.",fa:"معمولاً وقتی کودک کاملاً بیدار است و حالت تهوع ندارد، می‌تواند به‌طور عادی بخورد و بنوشد. نوشیدن مایعات کافی به جریان ادرار کمک می‌کند."},
+  pain:{en:"Some soreness and bladder spasms can happen for a few days. Give pain medicine exactly as your surgeon prescribed.",fa:"کمی درد و گرفتگی مثانه تا چند روز ممکن است پیش بیاید. داروی مسکن را دقیقاً طبق دستور جراح بدهید."}}
 };
-const SOON={ent:{en:"Ear tubes (grommets)",fa:"لوله‌گذاری گوش"},uro:{en:"Hypospadias repair",fa:"ترمیم هیپوسپادیاس"}};
-const st = {welcome:true, role:null, finger:false, surg:null, setup:1, child:{name:"Ali",age:6,weight:20}, centre:null, surgeon:null, lang:"en", tab:"home", age:1, ktab:"team", leads:[], bfly:"blue", face:null, drink:null, sleep:null, logs:[], chat:[], time:"08:45"};
+const SOON={ent:{en:"Ear tubes and other ENT surgery",fa:"لوله‌گذاری گوش و سایر جراحی‌های گوش و حلق و بینی"},uro:{en:"Other paediatric urology surgery",fa:"سایر جراحی‌های ارولوژی کودکان"}};
+const st = {date:"", selDay:1, welcome:true, role:null, finger:false, surg:null, setup:1, child:{name:"Ali",age:6,weight:20}, centre:null, surgeon:null, lang:"en", tab:"home", age:1, ktab:"team", leads:[], bfly:"blue", face:null, drink:null, sleep:null, logs:{}, chat:[], time:"08:45"};
 const T = () => S[st.lang];
 const $ = id => document.getElementById(id);
 let raf = null;
@@ -407,6 +419,9 @@ function shift(time, h){ const [a,b]=time.split(":").map(Number); let m=a*60+b-h
 const C=()=>CENTRES.find(c=>c.id===st.centre);
 const SG=()=>C()&&C().surgeons.find(x=>x.id===st.surgeon);
 const L=o=>o[st.lang];
+const D0=()=>{ const d=new Date(st.date+"T00:00:00"); return d; };
+const daysTo=()=>{ const t=new Date(); t.setHours(0,0,0,0); return Math.round((D0()-t)/86400000); };
+const dayDate=n=>{ const d=D0(); d.setDate(d.getDate()+n); return new Intl.DateTimeFormat(st.lang==="fa"?"fa-IR":"en-GB",{day:"numeric",month:"short"}).format(d); };
 const SU=()=>SURG[st.surg]||SURG.tonsil;
 const roleOf=x=>x.spec==="uro"?X[st.lang].uroRole:X[st.lang].surgeonRole;
 function setup(){ const t=X[st.lang]; const c=C();
@@ -432,7 +447,8 @@ function setup(){ const t=X[st.lang]; const c=C();
   if(st.setup===4){ const sp=SG().spec; return `<h1>${t.setupTitle}</h1>${bar}<h2>${t.s4}</h2><p class="muted">${t.s4sub}</p>
     <div class="pick">${Object.entries(SURG).filter(([k,v])=>v.spec===sp).map(([k,v])=>`<button type="button" class="opt" data-surg="${k}" aria-pressed="${st.surg===k}"><b>${L(v.name)}</b><span>${L(v.desc)}</span></button>`).join("")}
     <button type="button" class="opt" disabled><b>${L(SOON[sp])}</b><span>${t.soon}</span></button></div>
-    <div class="row"><button class="btn ghost" type="button" data-setup="3">${t.back}</button><button class="btn" type="button" data-setup="0" ${st.surg?"":"disabled"}>${t.startApp}</button></div>`; }
+    <div class="block"><label class="planner" style="justify-content:space-between">${t.dateLbl}<input id="sdate" type="date" value="${st.date}"></label></div>
+    <div class="row"><button class="btn ghost" type="button" data-setup="3">${t.back}</button><button class="btn" type="button" data-setup="0" ${st.surg&&st.date?"":"disabled"}>${t.startApp}</button></div>`; }
   return `<h1>${t.setupTitle}</h1>${bar}<h2>${t.s3}</h2><p class="muted">${t.s3sub}</p>${teamHTML()}
     <div class="row"><button class="btn ghost" type="button" data-setup="4">${t.back}</button><button class="btn" type="button" data-setup="0">${t.startApp}</button></div>`;
 }
@@ -470,7 +486,7 @@ function renderChrome(){
 
 function home(){ const t=T(); return `
   <div class="hello"><h1>${X[st.lang].hello(st.child.name)}</h1><p class="muted">${X[st.lang].helloSub(st.child.name)}</p></div>
-  <div class="surgery"><div><b>${L(SU().name)}</b><span>${L(C().name)}</span></div><div class="count">${fa(3)}<small>${t.days}</small></div></div>
+  <div class="surgery"><div><b>${L(SU().name)}</b><span>${L(C().name)}</span></div><div class="count">${(()=>{const n=daysTo(), x=X[st.lang]; return n>0?`${fa(n)}<small>${x.toGo}</small>`: n===0?`<small style="font-size:16px">${x.todayS}</small>`:`<small>${x.dayWord}</small>${fa(-n)}<small>${x.afterD}</small>`;})()}</div></div>
   ${instrHTML()}
   <h2>${t.rolesTitle}</h2>
   <div class="roles">
@@ -536,12 +552,15 @@ function monitorHTML(force){ const on = force || st.leads.length===3, ox=st.fing
 function after(){ const t=T(); const faces=["😀","🙂","😐","🙁","😣","😭"];
   return `<h1>${t.afterTitle}</h1>
   <section class="alert" role="region" aria-label="${t.alertTitle}"><h3>${t.alertTitle}</h3><ul>${L(SU().alerts).map(x=>`<li>${x}</li>`).join("")}</ul><button class="btn" type="button" style="background:var(--alert)">${t.alertBtn}</button></section>
-  <section class="block"><h2>${t.checkTitle}</h2><p class="muted">${t.checkSub}</p>
+  <section class="block"><h2>${X[st.lang].calTitle}</h2><p class="note" style="margin-top:0">${X[st.lang].calSub}</p>
+    <div class="cal">${Array.from({length:15},(_,i)=>i+1).map(n=>`<button type="button" data-day="${n}" aria-pressed="${st.selDay===n}"><b>${fa(n)}</b><small>${dayDate(n)}</small>${st.logs[n]?`<span class="lg">${faces[st.logs[n].face]??"✓"}</span>`:[1,2,3,7,15].includes(n)?`<i class="dot"></i>`:""}</button>`).join("")}</div>
+  </section>
+  <section class="block"><h2>${t.checkTitle}</h2><p class="muted">${X[st.lang].dayWord} ${fa(st.selDay)} ${X[st.lang].afterD} · ${dayDate(st.selDay)}</p>
     <h3>${t.pain}</h3><div class="faces">${faces.map((f,i)=>`<button type="button" data-face="${i}" aria-pressed="${st.face===i}" aria-label="${fa(i*2)}/10">${f}</button>`).join("")}</div>
     <h3>${L(SU().q2)}</h3><div class="toggle-row">${["yes","some","no"].map(k=>`<button type="button" data-drink="${k}" aria-pressed="${st.drink===k}">${t[k]}</button>`).join("")}</div>
     <h3>${t.sleep}</h3><div class="toggle-row">${["yes","some","no"].map(k=>`<button type="button" data-sleep="${k}" aria-pressed="${st.sleep===k}">${t[k]}</button>`).join("")}</div>
     <button class="btn" type="button" id="saveCheck">${t.save}</button>
-    ${st.logs.length?`<h3 style="margin-top:14px">${t.logTitle}</h3><ul class="log">${st.logs.map(l=>`<li>${faces[l.face]??"–"} · ${L(SU().q2).replace(/[?؟]/,"")}: ${t[l.drink]??"–"} · ${t.sleep.replace("?","")}: ${t[l.sleep]??"–"}</li>`).join("")}</ul><p class="note">${t.logged}</p>`:""}
+    ${Object.keys(st.logs).length?`<h3 style="margin-top:14px">${t.logTitle}</h3><ul class="log">${Object.keys(st.logs).map(Number).sort((a,b)=>a-b).map(n=>{const l=st.logs[n]; return `<li><b>${X[st.lang].dayWord} ${fa(n)}</b> · ${faces[l.face]??"–"} · ${L(SU().q2).replace(/[?؟]/,"")}: ${t[l.drink]??"–"} · ${t.sleep.replace(/[?؟]/,"")}: ${t[l.sleep]??"–"}</li>`;}).join("")}</ul><p class="note">${t.logged}</p>`:""}
   </section>
   <section class="block"><h2>${L(SU().careTitle)}</h2><div class="food"><div class="yes">${L(SU().yes)}</div><div class="no">${L(SU().no)}</div></div><p class="note">${t.foodNote}</p></section>`; }
 
@@ -614,14 +633,15 @@ document.addEventListener("click",e=>{
   if(b.dataset.face){ st.face=+b.dataset.face; render(); return; }
   if(b.dataset.drink){ st.drink=b.dataset.drink; render(); return; }
   if(b.dataset.sleep){ st.sleep=b.dataset.sleep; render(); return; }
-  if(b.id==="saveCheck"){ st.logs.unshift({face:st.face,drink:st.drink,sleep:st.sleep}); st.face=st.drink=st.sleep=null; render(); return; }
+  if(b.id==="saveCheck"){ st.logs[st.selDay]={face:st.face,drink:st.drink,sleep:st.sleep}; st.face=st.drink=st.sleep=null; render(); return; }
+  if(b.dataset.day){ st.selDay=+b.dataset.day; const l=st.logs[st.selDay]; st.face=l?l.face:null; st.drink=l?l.drink:null; st.sleep=l?l.sleep:null; render(); return; }
   if(b.dataset.chip){ const q=T().chips[+b.dataset.chip]; st.chat.push({who:"me",text:q}); st.chat.push(answer(q)); render(); return; }
   if(b.id==="breathBtn"){ const bal=$("balloon"), lab=$("blabel"); let inhale=true, n=0; clearInterval(breathTimer);
     const step=()=>{ bal.classList.toggle("in",inhale); lab.textContent=inhale?T().in:T().out; inhale=!inhale; if(++n>6){clearInterval(breathTimer); bal.classList.remove("in"); lab.textContent="✨";} };
     step(); breathTimer=setInterval(step,4000); }
 });
 document.addEventListener("submit",e=>{ if(e.target.id==="askForm"){ e.preventDefault(); const q=$("q").value.trim(); if(!q) return; st.chat.push({who:"me",text:q.replace(/</g,"&lt;")}); st.chat.push(answer(q)); render(); }});
-document.addEventListener("change",e=>{ if(e.target.id==="stime" && e.target.value){ st.time=e.target.value; render(); } });
+document.addEventListener("change",e=>{ if(e.target.id==="sdate"){ st.date=e.target.value; render(); return; } if(e.target.id==="stime" && e.target.value){ st.time=e.target.value; render(); } });
 document.addEventListener("input",e=>{ if(e.target.id==="stime" && e.target.value){ st.time=e.target.value; const p=document.querySelectorAll(".fast b"); p[0].textContent=shift(st.time,C().solids); p[1].textContent=shift(st.time,C().fluids); }});
 render();
 </script>
