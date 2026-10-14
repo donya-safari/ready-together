@@ -419,6 +419,17 @@ function shift(time, h){ const [a,b]=time.split(":").map(Number); let m=a*60+b-h
 const C=()=>CENTRES.find(c=>c.id===st.centre);
 const SG=()=>C()&&C().surgeons.find(x=>x.id===st.surgeon);
 const L=o=>o[st.lang];
+function g2j(gy,gm,gd){ var g_d_m=[0,31,59,90,120,151,181,212,243,273,304,334]; var gy2=(gm>2)?(gy+1):gy; var days=355666+(365*gy)+~~((gy2+3)/4)-~~((gy2+99)/100)+~~((gy2+399)/400)+gd+g_d_m[gm-1]; var jy=-1595+(33*~~(days/12053)); days%=12053; jy+=4*~~(days/1461); days%=1461; if(days>365){ jy+=~~((days-1)/365); days=(days-1)%365;} var jm,jd; if(days<186){ jm=1+~~(days/31); jd=1+(days%31);} else { jm=7+~~((days-186)/30); jd=1+((days-186)%30);} return [jy,jm,jd]; }
+function j2g(jy,jm,jd){ jy+=1595; var days=-355668+(365*jy)+(~~(jy/33)*8)+~~(((jy%33)+3)/4)+jd+((jm<7)?(jm-1)*31:((jm-7)*30)+186); var gy=400*~~(days/146097); days%=146097; if(days>36524){ gy+=100*~~(--days/36524); days%=36524; if(days>=365)days++; } gy+=4*~~(days/1461); days%=1461; if(days>365){ gy+=~~((days-1)/365); days=(days-1)%365;} var gd=days+1; var sal_a=[0,31,((gy%4===0&&gy%100!==0)||(gy%400===0))?29:28,31,30,31,30,31,31,30,31,30,31]; var gm; for(gm=0;gm<13&&gd>sal_a[gm];gm++) gd-=sal_a[gm]; return [gy,gm,gd]; }
+const JM=["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
+function jDays(y,m){ if(m<=6) return 31; if(m<=11) return 30; const r=g2j(...j2g(y,12,30)); return r[1]===12?30:29; }
+function jPicker(){
+  let y="",m="",d=""; if(st.date){ const [a,b,c]=st.date.split("-").map(Number); [y,m,d]=g2j(a,b,c); } else if(st.jd){ ({y,m,d}=st.jd); }
+  const ty=g2j(...(()=>{const t=new Date(); return [t.getFullYear(),t.getMonth()+1,t.getDate()];})())[0];
+  const sel=(id,ph,opts,v)=>`<select id="${id}" data-jp="1" style="flex:1;border:1px solid var(--line);border-radius:12px;padding:10px 6px;background:var(--paper);font-size:16px"><option value="">${ph}</option>${opts.map(o=>`<option value="${o[0]}" ${String(o[0])===String(v)?"selected":""}>${o[1]}</option>`).join("")}</select>`;
+  const nd=(y&&m)?jDays(+y,+m):31;
+  return `<div style="display:flex;gap:6px;margin-top:8px">${sel("jd","روز",Array.from({length:nd},(_,i)=>[i+1,fa(i+1)]),d)}${sel("jm","ماه",JM.map((n,i)=>[i+1,n]),m)}${sel("jy","سال",[ty-1,ty,ty+1].map(x=>[x,fa(x)]),y)}</div>`;
+}
 const D0=()=>{ const d=new Date(st.date+"T00:00:00"); return d; };
 const daysTo=()=>{ const t=new Date(); t.setHours(0,0,0,0); return Math.round((D0()-t)/86400000); };
 const dayDate=n=>{ const d=D0(); d.setDate(d.getDate()+n); return new Intl.DateTimeFormat(st.lang==="fa"?"fa-IR":"en-GB",{day:"numeric",month:"short"}).format(d); };
@@ -447,7 +458,7 @@ function setup(){ const t=X[st.lang]; const c=C();
   if(st.setup===4){ const sp=SG().spec; return `<h1>${t.setupTitle}</h1>${bar}<h2>${t.s4}</h2><p class="muted">${t.s4sub}</p>
     <div class="pick">${Object.entries(SURG).filter(([k,v])=>v.spec===sp).map(([k,v])=>`<button type="button" class="opt" data-surg="${k}" aria-pressed="${st.surg===k}"><b>${L(v.name)}</b><span>${L(v.desc)}</span></button>`).join("")}
     <button type="button" class="opt" disabled><b>${L(SOON[sp])}</b><span>${t.soon}</span></button></div>
-    <div class="block"><label class="planner" style="justify-content:space-between">${t.dateLbl}<input id="sdate" type="date" value="${st.date}"></label></div>
+    <div class="block">${st.lang==="fa"?`<b>${t.dateLbl}</b>${jPicker()}`:`<label class="planner" style="justify-content:space-between">${t.dateLbl}<input id="sdate" type="date" value="${st.date}"></label>`}</div>
     <div class="row"><button class="btn ghost" type="button" data-setup="3">${t.back}</button><button class="btn" type="button" data-setup="0" ${st.surg&&st.date?"":"disabled"}>${t.startApp}</button></div>`; }
   return `<h1>${t.setupTitle}</h1>${bar}<h2>${t.s3}</h2><p class="muted">${t.s3sub}</p>${teamHTML()}
     <div class="row"><button class="btn ghost" type="button" data-setup="4">${t.back}</button><button class="btn" type="button" data-setup="0">${t.startApp}</button></div>`;
@@ -641,7 +652,10 @@ document.addEventListener("click",e=>{
     step(); breathTimer=setInterval(step,4000); }
 });
 document.addEventListener("submit",e=>{ if(e.target.id==="askForm"){ e.preventDefault(); const q=$("q").value.trim(); if(!q) return; st.chat.push({who:"me",text:q.replace(/</g,"&lt;")}); st.chat.push(answer(q)); render(); }});
-document.addEventListener("change",e=>{ if(e.target.id==="sdate"){ st.date=e.target.value; render(); return; } if(e.target.id==="stime" && e.target.value){ st.time=e.target.value; render(); } });
+document.addEventListener("change",e=>{ if(e.target.id==="sdate"){ st.date=e.target.value; render(); return; }
+  if(e.target.dataset.jp){ const y=$("jy").value, m=$("jm").value; let d=$("jd").value; st.jd={y,m,d};
+    if(y&&m&&d){ if(+d>jDays(+y,+m)) d=String(jDays(+y,+m)); const [a,b,c]=j2g(+y,+m,+d); st.date=`${a}-${String(b).padStart(2,"0")}-${String(c).padStart(2,"0")}`; } else st.date="";
+    render(); return; } if(e.target.id==="stime" && e.target.value){ st.time=e.target.value; render(); } });
 document.addEventListener("input",e=>{ if(e.target.id==="stime" && e.target.value){ st.time=e.target.value; const p=document.querySelectorAll(".fast b"); p[0].textContent=shift(st.time,C().solids); p[1].textContent=shift(st.time,C().fluids); }});
 render();
 </script>
